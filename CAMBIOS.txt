@@ -1,0 +1,11 @@
+Se modificó las siguientes clases:
+JUEGO
+RENDERIZADOR
+ENEMIGO (AGREGADO)
+MAPA
+CELDA
+INTERPRETECOMANDO
+
+//Falta Cancelar la accion de un personaje cuando está atrapado
+
+v207
