@@ -15,7 +15,7 @@ public class Main {
         Juego j = new Juego();
 
         j.start();
-        System.out.println("Hola mundo");
+        System.out.println("Hola mundo 2");
     }
     
 }
