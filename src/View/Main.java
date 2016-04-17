@@ -15,7 +15,7 @@ public class Main {
         Juego j = new Juego();
 
         j.start();
-        System.out.println("Salu2");
+        System.out.println("Pa ke kieres saber eso haha salu2");
     }
     
 }
