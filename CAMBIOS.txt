@@ -1,4 +1,4 @@
-Se modificó las siguientes clases:
+Se modifico las siguientes clases:
 JUEGO
 RENDERIZADOR
 ENEMIGO (AGREGADO)
@@ -6,6 +6,5 @@ MAPA
 CELDA
 INTERPRETECOMANDO
 
-//Falta Cancelar la accion de un personaje cuando está atrapado
+//Falta Cancelar la accion de un personaje cuando esta atrapado
 
-v207
