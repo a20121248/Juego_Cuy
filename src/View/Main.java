@@ -16,6 +16,7 @@ public class Main {
 
         j.start();
         System.out.println("Pa ke kieres saber eso haha salu2");
+        System.out.println("no osy zientifiko");
     }
     
 }
