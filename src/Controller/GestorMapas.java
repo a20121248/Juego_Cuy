@@ -21,10 +21,6 @@ public class GestorMapas {
         for (int n = 0; n < numNiveles; n++)
             updateGrafToNormal(n);
     }
- 
-    public boolean validarPosicion(int posX, int posY){
-        return !(posX < 0 || posY < 0 || posX >= 16 || posY >= 12);
-    }
     
     public Mapa getMapa(int nivel){
         if (nivel >= 0 && nivel < 4)
