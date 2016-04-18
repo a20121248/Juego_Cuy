@@ -3,6 +3,10 @@ package Controller;
 
 import Model.*;
 import java.io.*;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Godievski
@@ -18,7 +22,14 @@ public class GestorMapas {
             mapas[niveles] = new Mapa();
         mapasGraf = new char[numNiveles][12][16];
         
-        setMapaGrafico();
+        try {
+            setMapaGrafico();
+        } catch (FileNotFoundException ex) {
+            System.out.println("No se encontraron los mapas.");
+            Scanner sc = new Scanner(System.in);
+            sc.nextLine();
+            System.exit(1);
+        }
         for (int n = 0; n < numNiveles; n++)
             this.mapas[n].CargarMapa(mapasGraf[n]);
     }
@@ -30,11 +41,13 @@ public class GestorMapas {
             return null;
     }
     
-    private void setMapaGrafico(){
-//        FileReader arch;
-//        for (int i = 0; i <= this.numNiveles; i++) {
-//            arch = new FileReader("../Mapa0.txt");
-//        }
+    private void setMapaGrafico() throws FileNotFoundException{
+        FileReader arch;
+        //Deberia ser mayor igual
+        for (int i = 0; i < this.numNiveles; i++) {
+            arch = new FileReader("./src/Resources/Mapa" + i + ".txt");
+            
+        }
         
         char[][] nivel1 = {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
