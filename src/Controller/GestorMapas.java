@@ -2,6 +2,7 @@ package Controller;
 
 
 import Model.*;
+import java.io.*;
 /**
  *
  * @author Godievski
@@ -30,6 +31,11 @@ public class GestorMapas {
     }
     
     private void setMapaGrafico(){
+//        FileReader arch;
+//        for (int i = 0; i <= this.numNiveles; i++) {
+//            arch = new FileReader("../Mapa0.txt");
+//        }
+        
         char[][] nivel1 = {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
