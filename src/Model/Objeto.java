@@ -9,10 +9,12 @@ package Model;
  *
  * @author Anthony
  */
-public class Objeto {
-    private int tipo; //1 = obstáculo, 2 = objeto de ayuda
+public class Objeto extends Dibujable {
+    //1 = obstáculo, 2 = objeto de ayuda
+    private int tipo; 
     
-    public Objeto(int tipo) {
+    public Objeto(char elementoGrafico,int tipo) {
+        super(elementoGrafico);
         this.tipo = tipo;
     }
     public void setTipo(int value){

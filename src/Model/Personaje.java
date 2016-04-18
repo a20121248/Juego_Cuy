@@ -4,17 +4,24 @@ package Model;
  *
  * @author Godievski
  */
-public class Personaje {
+public class Personaje extends Dibujable{
     private int vida;
     private int posX;
     private int posY;
     static int N = 10;
     
-    public Personaje(){
+    public Personaje(char elementoGrafico){
+        super(elementoGrafico);
         this.vida = N;
+    }   
+    public Personaje (int posX, int posY, char elementoGrafico) {
+        super(elementoGrafico);
+        this.vida = N;
+        this.posX = posX;
+        this.posY = posY;
     }
-    
-    public Personaje (int posX, int posY) {
+    public Personaje (int posX, int posY,char elementoGrafico,int alto, int ancho) {
+        super(elementoGrafico,alto,ancho);
         this.vida = N;
         this.posX = posX;
         this.posY = posY;
@@ -66,4 +73,5 @@ public class Personaje {
     public void setPosY(int posY) {
         this.posY = posY;
     }
+   
 }

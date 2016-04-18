@@ -3,22 +3,23 @@ package Model;
  *
  * @author Godievski
  */
-public class Enemigo {
+public class Enemigo extends Dibujable {
     /*PosX & PosY indica la esquina izquierda superior*/
     private int posX; 
     private int posY;
-    private int anchura;
-    private int altura;
     
-    public Enemigo(){
-        this.anchura = this.altura = 1;
+    public Enemigo(char elementoGrafico){
+        super(elementoGrafico);
     }
-    
-    public Enemigo (int posX, int posY, int anchura, int altura){
+    public Enemigo (int posX, int posY, char elementoGrafico){
+        super(elementoGrafico);
         this.posX = posX;
         this.posY = posY;
-        this.anchura = anchura;
-        this.altura = altura;
+    }
+    public Enemigo (int posX, int posY, char elementoGrafico, int alto, int ancho){
+        super(elementoGrafico, alto, ancho);
+        this.posX = posX;
+        this.posY = posY;
     }
     public int getPosX(){
         return posX;
@@ -31,20 +32,5 @@ public class Enemigo {
     }
     public void setPosY(int value){
         posY = value;
-    }
-    public int getAnchura()
-    {
-        return this.anchura;
-    }
-    public void setAnchura(int value){
-        this.anchura = value;
-    }
-    public int getAltura()
-    {
-        return this.altura;
-    }
-    public void setAltura(int value)
-    {
-        this.altura = value;
     }
 }

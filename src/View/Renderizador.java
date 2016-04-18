@@ -1,4 +1,5 @@
 package View;
+import Controller.GestorMapas;
 import Model.*;
 /**
  *
@@ -23,12 +24,18 @@ public class Renderizador {
         Mapa mapa = gm.getMapa(nivel);
         imprimirLinea();
         for(int fila = 0; fila < 12; fila++){
-            if (fila < 3) continue;
             System.out.print("| ");
             for(int columna = 0; columna < 16; columna++){
                 Celda celda = mapa.getMapaAt(fila, columna);
-                Objeto obj = celda.getObj();
-                int suelo = celda.getTipoSuelo();
+                if (celda == null){
+                    imprimir(' ');
+                    continue;
+                }
+                Dibujable obj = celda.getObj();
+                if (obj == null){
+                    imprimir(' ');
+                    continue;
+                }
                 if (p1.getPosX() == columna && p1.getPosY() == fila){
                     imprimir('A');
                     continue;
@@ -41,42 +48,11 @@ public class Renderizador {
                 /*Falta desarrollar condicion de que sea mas grande*/
                 if (enemigo != null)
                     if (enemigo.getPosX() == columna && enemigo.getPosY() == fila){
-                        imprimir('T');
+                        imprimir('E');
                         continue;
                     }
-
-                if (obj != null){
-                    imprimir('o');
-                } else{
-                    switch (suelo) {
-                        case 1:
-                            /*Suelo de Personaje 1*/
-                            imprimir('S');
-                            break;
-                        case 2:
-                            /*Suelo de Personaje 2*/
-                            imprimir('N');
-                            break;
-                        case 3:
-                            /*Meta*/
-                            imprimir('F');
-                            break;
-                        case 4:
-                            /*Accion A*/
-                            imprimir('a');
-                            break;
-                        case 5:
-                            /*Accion B*/
-                            imprimir('b');
-                            break;
-                        case 6:
-                            /*Duo*/
-                            imprimir('D');
-                            break;
-                        default:
-                            break;
-                    }
-                }
+                
+                imprimir(obj.getElementoGrafico());
             }
             System.out.println('|');
             if (fila != 11){
