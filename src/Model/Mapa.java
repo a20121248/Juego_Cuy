@@ -3,10 +3,6 @@ package Model;
 import java.util.List;
 import java.util.ArrayList;
 
-
-
-
-
 /**
  *
  * @author Godievski
@@ -15,7 +11,7 @@ public class Mapa {
     private Celda[][] mapa;
     static int filas = 12;
     static int columnas = 16;
-    List listaDuo;
+    List<Dibujable> listaDuo;
     
     public Mapa() {
         mapa = new Celda[filas][columnas];
@@ -35,7 +31,7 @@ public class Mapa {
         if (columna < 0 || columna >= 16) return null;
         return mapa[fila][columna];
     }
-    public List getListDuo(){
+    public List<Dibujable> getListDuo(){
         return this.listaDuo;
     }
     public void CargarMapa(char[][] mapa){
@@ -57,7 +53,7 @@ public class Mapa {
             celda.setObj(new Terreno(c,3));
         else if (c == 'D')
             celda.setObj(new Terreno(c,4));
-        //Trigger enemigo (por si a caso, pero no tenemos enemigo)
+        //Trigger enemigo (por si acaso, pero no tenemos enemigo)
         else if (c == 'T') 
             celda.setObj(new Terreno(c,5));
         else if (c == 'F')
