@@ -17,7 +17,7 @@ public class Juego {
     private final GestorMapas gestorMapa;
     private final Personaje p1;
     private final Personaje p2;
-    private Enemigo enemigo;
+    //private Enemigo enemigo;
     private final Scanner scan;
     private int nivel;
     private String nombre1, nombre2;
@@ -32,7 +32,7 @@ public class Juego {
         nombre1 = "Player 1";
         nombre2 = "Player 2";
         p2 = new Personaje('B');
-        enemigo = new Enemigo('E');
+        //enemigo = new Enemigo('E');
         nivel = 0;
         this.inicializarPersonajes(nivel);
     }
@@ -80,27 +80,7 @@ public class Juego {
         }
     }
     private void capturarAccion(){
-        /*Si el personaje está en casilla accion*/
         String accion;
-        /*
-        if(gestorMapa.personajeEnAccion(p1,nivel)){
-            System.out.print("Escriba la accion(QEQE): ");
-            accion = scan.nextLine();
-            if (lector.ejecutarAccionEspecial(accion, p1, p2))
-                enemigo = null; //mata al enemigo
-        }
-        if(gestorMapa.personajeEnAccion(p2,nivel)){
-            System.out.print("Escriba la accion(UOUO): ");
-            accion = scan.nextLine();
-            if (lector.ejecutarAccionEspecial(accion, p1, p2))
-                enemigo = null; //mata al enemigo
-        }
-        System.out.print("Escriba la accion mover(W - A - S - D / I - J - K - L): ");
-        accion = scan.nextLine();
-        for (int i = 0; i < accion.length(); i++){
-            char c = accion.charAt(i);
-            lector.ejecutarMovimiento(c, p1,p2,gestorMapa,nivel,enemigo);
-        }*/
         int posX1 = p1.getPosX();   int posY1 = p1.getPosY();
         int posX2 = p2.getPosX();   int posY2 = p2.getPosY();
         Mapa m = this.gestorMapa.getMapa(nivel);
@@ -112,7 +92,7 @@ public class Juego {
                 accion = scan.nextLine();
                 accion = accion.toUpperCase();
                 /*EJECUTA ACCION ESPECIAL SEGUN NIVEL*/
-                boolean x = lector.ejecutarAccionEspecial(accion, p1, p2);
+                boolean x = lector.ejecutarAccionEspecial(accion,gestorMapa.getMapa(nivel), p1, p2);
                 return;
             }
         
@@ -121,7 +101,7 @@ public class Juego {
                 System.out.print("Escriba la accion(UOUO): ");
                 accion = scan.nextLine();
                 /*EJECUTA ACCION ESPECIAL SEGUN NIVEL*/
-                boolean x = lector.ejecutarAccionEspecial(accion, p1, p2);
+                boolean x = lector.ejecutarAccionEspecial(accion,gestorMapa.getMapa(nivel), p1, p2);
                 return;
             } else if (obj1 instanceof Terreno){
                 if (((Terreno) obj1).getTipo() == 4 && 
@@ -130,7 +110,7 @@ public class Juego {
                     accion = scan.nextLine();
                     accion = accion.toUpperCase();
                     /*EJECUTA ACCION DUO SEGUN NIVEL*/
-                    boolean x = lector.ejecutarAccionEspecial(accion, p1, p2);
+                    boolean x = lector.ejecutarAccionEspecial(accion,gestorMapa.getMapa(nivel), p1, p2);
                     return;
                 }
             }
@@ -140,7 +120,7 @@ public class Juego {
         char c = ' ';
         if (accion.length() > 0){
             c = accion.charAt(0);
-            lector.interpretaMovimiento(c, p1,p2,gestorMapa,nivel,enemigo);
+            lector.interpretaMovimiento(c, p1,p2,gestorMapa,nivel);
         }
     }
     
@@ -192,7 +172,7 @@ public class Juego {
         System.out.println(p1.getVida());
         System.out.print("Nivel: ");
         System.out.println(nivel + 1);
-        rend.mostrarMapa(gestorMapa,nivel,p1,p2,enemigo);
+        rend.mostrarMapa(gestorMapa,nivel,p1,p2);
     }
     
     private boolean finJuego(){        
@@ -207,22 +187,10 @@ public class Juego {
         if (nivel == 0){
             p1.setPosY(5);  p1.setPosX(15); p1.setVida(10); 
             p2.setPosY(9);  p2.setPosX(15); p2.setVida(10);
-            if (enemigo == null)
-                enemigo = new Enemigo(3,6,'E');
-            else{
-                enemigo.setPosX(3); enemigo.setPosY(6);
-                
-            }
         }
         if (nivel == 1){
             p1.setPosY(5);  p1.setPosX(15); p1.setVida(10); 
             p2.setPosY(9);  p2.setPosX(15); p2.setVida(10);
-            if (enemigo == null)
-                enemigo = new Enemigo(6,3,'E');
-            else{
-                enemigo.setPosX(6); enemigo.setPosY(3);
-                
-            }
         }
     }
     

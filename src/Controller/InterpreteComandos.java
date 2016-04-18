@@ -38,17 +38,26 @@ public class InterpreteComandos {
         return (celda.getObj() == null);
     }
     
-    public boolean ejecutarAccionEspecial(String accion, Personaje p1, Personaje p2){
+    public boolean ejecutarAccionEspecial(String accion,Mapa mapa, Personaje p1, Personaje p2){
+        
         if ("QEQE".equals(accion)){
             /*Para p1*/
+            Celda celda = mapa.getMapaAt( p1.getPosY(),p1.getPosX());
+            ((Terreno) celda.getObj()).setTipo(1);
             return true;
         }
         else if("UOUO".equals(accion)){
             /*Para p2*/
+            Celda celda = mapa.getMapaAt( p2.getPosY(),p2.getPosX());
+            ((Terreno) celda.getObj()).setTipo(2);
             return true;
         } 
         else if ("XXX".equals(accion)) {
             /*Para p1 y  p2*/
+            Celda celda1 = mapa.getMapaAt( p1.getPosY(),p1.getPosX());
+            Celda celda2 = mapa.getMapaAt( p2.getPosY(),p2.getPosX());
+            ((Terreno) celda1.getObj()).setTipo(1);
+            ((Terreno) celda2.getObj()).setTipo(2);
             return true;
         }else{
             /*Pierde Vida*/
@@ -59,7 +68,7 @@ public class InterpreteComandos {
     }
     
     public void interpretaMovimiento(char c, Personaje p1, Personaje p2,
-            GestorMapas gm,int nivel,Enemigo enemigo){
+            GestorMapas gm,int nivel){
         int difX = 0;
         int difY = 0;
         int personaje = 0;

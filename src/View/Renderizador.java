@@ -6,8 +6,7 @@ import Model.*;
  * @author Godievski
  */
 public class Renderizador {
-    
-    
+
     private void imprimir(char c){
         System.out.print(c);
         System.out.print(' ');
@@ -20,7 +19,7 @@ public class Renderizador {
     }
     
     public void mostrarMapa(GestorMapas gm,int nivel,
-        Personaje p1, Personaje p2, Enemigo enemigo){
+        Personaje p1, Personaje p2){
         Mapa mapa = gm.getMapa(nivel);
         imprimirLinea();
         for(int fila = 0; fila < 12; fila++){
@@ -44,14 +43,6 @@ public class Renderizador {
                     imprimir('B');
                     continue;
                 }
-                /*IMPRIMIR POSICION DEL ENEMIGO*/
-                /*Falta desarrollar condicion de que sea mas grande*/
-                if (enemigo != null)
-                    if (enemigo.getPosX() == columna && enemigo.getPosY() == fila){
-                        imprimir('E');
-                        continue;
-                    }
-                
                 imprimir(obj.getElementoGrafico());
             }
             System.out.println('|');
