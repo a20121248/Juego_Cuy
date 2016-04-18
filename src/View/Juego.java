@@ -167,8 +167,8 @@ public class Juego {
             p2.setPosY(9);  p2.setPosX(15); p2.setVida(10);
         }
         if (nivel == 1){
-            p1.setPosY(5);  p1.setPosX(15); p1.setVida(10); 
-            p2.setPosY(9);  p2.setPosX(15); p2.setVida(10);
+            p1.setPosY(5);  p1.setPosX(0); p1.setVida(10); 
+            p2.setPosY(10);  p2.setPosX(0); p2.setVida(10);
         }
     }
     

@@ -40,6 +40,9 @@ public class Mapa {
             celda.setObj(new Terreno(c,3));
         else if (c == 'D')
             celda.setObj(new Terreno(c,4));
+        //Trigger enemigo (por si a caso, pero no tenemos enemigo)
+        else if (c == 'T') 
+            celda.setObj(new Terreno(c,5));
         else if (c == 'F')
             celda.setObj(new Terreno(c,6));
         else if (c == 'g' || c == 'h' || c == 't' || c == 'm' 
