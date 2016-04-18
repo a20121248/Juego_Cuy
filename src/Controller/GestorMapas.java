@@ -23,7 +23,7 @@ public class GestorMapas {
     }
  
     public boolean validarPosicion(int posX, int posY){
-        return !(posX < 0 || posY < 3 || posX >= 16 || posY >= 12);
+        return !(posX < 0 || posY < 0 || posX >= 16 || posY >= 12);
     }
     
     public Mapa getMapa(int nivel){
@@ -32,19 +32,7 @@ public class GestorMapas {
         else
             return null;
     }
-    public char getMapaGraf(int nivel,int fila, int col){
-        if (nivel >= 0 && nivel < numNiveles){
-            Celda celda = mapas[nivel].getMapaAt(fila, col);
-            if (celda == null){
-                return ' ';
-            }
-            if (celda.getObj() == null){
-                return ' ';
-            }
-            return celda.getObj().getElementoGrafico();
-        }
-        return ' ';
-    }
+
     public void updateGrafToNormal(int nivel){
         this.mapas[nivel].CargarMapa(mapasGraf[nivel]);
     }
@@ -95,9 +83,7 @@ public class GestorMapas {
             {'F', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'g', 'g', 'N', 'N', 'N'}
         };
         
-        
         mapasGraf[0] = nivel1;
         mapasGraf[1] = nivel2;
-
     }
 }

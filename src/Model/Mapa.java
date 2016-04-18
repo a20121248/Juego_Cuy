@@ -32,9 +32,7 @@ public class Mapa {
     }
     private Celda charToCelda(char c){
         Celda celda = new Celda();
-        if (c == ' ')
-            return null;
-        else if (c == 'S')
+        if (c == 'S')
             celda.setObj(new Terreno(c,1));
         else if (c == 'N')
             celda.setObj(new Terreno(c,2));
@@ -50,7 +48,6 @@ public class Mapa {
             celda.setObj(new Objeto(c,1));
         else if (c == 'o')
             celda.setObj(new Objeto(c,2));
-
         return celda;
     }
 }

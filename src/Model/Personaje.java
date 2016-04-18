@@ -26,30 +26,12 @@ public class Personaje extends Dibujable{
         this.posX = posX;
         this.posY = posY;
     }
-    
-    public void Accion(int tipo) { 
-        switch (tipo) {
-            case 1:
-                posX = posX - 1; //Mover a la izquierda
-                break;
-            case 2:
-                posX = posX + 1; //Mover a la derecha
-                break;
-            case 3:
-                posY = posY - 1; //Mover hacia arriba
-                break;
-            case 4:
-                posY = posY + 1; //Mover hacia abajo
-                break;
-            default:
-                break;
-        }
+
+    public void Mover(int x, int y){
+        this.posX = x;
+        this.posY = y;
     }
-    
-    public boolean verificaMeta(int col, int fila){
-        return posX == col && posY == fila;
-    }
-    
+
     public int getVida(){
         return vida;
     }

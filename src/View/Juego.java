@@ -90,7 +90,6 @@ public class Juego {
             if (((Terreno) obj1).getTipo() == 3){
                 System.out.print("Escriba la accion(QEQE): ");
                 accion = scan.nextLine();
-                accion = accion.toUpperCase();
                 /*EJECUTA ACCION ESPECIAL SEGUN NIVEL*/
                 boolean x = lector.ejecutarAccionEspecial(accion,gestorMapa.getMapa(nivel), p1, p2);
                 return;
@@ -108,7 +107,6 @@ public class Juego {
                     ((Terreno) obj2).getTipo() == 4){
                     System.out.print("Escriba la accion duo(XXX): ");
                     accion = scan.nextLine();
-                    accion = accion.toUpperCase();
                     /*EJECUTA ACCION DUO SEGUN NIVEL*/
                     boolean x = lector.ejecutarAccionEspecial(accion,gestorMapa.getMapa(nivel), p1, p2);
                     return;
@@ -116,50 +114,30 @@ public class Juego {
             }
         System.out.print("Escriba la accion mover(W-A-S-D / I-J-K-L): ");
         accion = scan.nextLine();
-        accion = accion.toUpperCase();
-        char c = ' ';
-        if (accion.length() > 0){
-            c = accion.charAt(0);
-            lector.interpretaMovimiento(c, p1,p2,gestorMapa,nivel);
-        }
+        lector.interpretaMovimiento(accion, p1,p2,gestorMapa,nivel);
     }
     
     private void actualizarInfo()throws IOException, InterruptedException{
         /*Llegó al final de la menta, pasa de nivel*/
         /*VERIFICA P1 y P2 EN META*/
-        boolean cond1 = false;
-        boolean cond2 = false;
-        for (int f = 0; f < 12; f++){
-            for(int c = 0; c < 16; c++){
-                char tipo = gestorMapa.getMapaGraf(nivel, f, c);
-                if (tipo == 'F'){
-                    cond1 = p1.verificaMeta(c,f);
-                    if (cond1) break;
-                }
-            }
-            if (cond1) break;
-        }
-            
-        for (int f = 0; f < 12; f++){
-            for(int c = 0; c < 16; c++){
-                char tipo = gestorMapa.getMapaGraf(nivel, f, c);
-                if (tipo == 'F'){
-                    cond2 = p2.verificaMeta(c,f);
-                    if (cond2) break;
-                }
-            }
-            if (cond2) break;
-        }
-        if (cond1 && cond2) {
-            renderizar();
-            nivel += 1;
-            System.out.print("Acabaste el nivel ");
-            System.out.print(nivel);
-            System.out.print(". Presiona ENTER para continuar...");
-            scan.nextLine();
-            inicializarPersonajes(nivel);
-        }
         
+        int posX1 = p1.getPosX(); int posY1 = p1.getPosY();
+        int posX2 = p2.getPosX(); int posY2 = p2.getPosY();
+        
+        Celda celda1 = gestorMapa.getMapa(nivel).getMapaAt(posY1, posX1);
+        Celda celda2 = gestorMapa.getMapa(nivel).getMapaAt(posY2, posX2);
+        if (celda1.getObj() instanceof Terreno && celda2.getObj() instanceof Terreno){
+            if (((Terreno)celda1.getObj()).getTipo() == 6 && 
+                ((Terreno)celda2.getObj()).getTipo() == 6){
+                renderizar();
+                nivel += 1;
+                System.out.print("Acabaste el nivel ");
+                System.out.print(nivel);
+                System.out.print(". Presiona ENTER para continuar...");
+                scan.nextLine();
+                inicializarPersonajes(nivel);
+            }
+        }
     }
     private void renderizar() throws IOException, InterruptedException{
         cleanWindow();
