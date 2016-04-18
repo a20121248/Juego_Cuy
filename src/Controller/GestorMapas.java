@@ -16,10 +16,10 @@ public class GestorMapas {
         for (int niveles = 0; niveles < numNiveles; niveles++)
             mapas[niveles] = new Mapa();
         mapasGraf = new char[numNiveles][12][16];
-        /*NIVEL 1*/
+        
         setMapaGrafico();
         for (int n = 0; n < numNiveles; n++)
-            updateGrafToNormal(n);
+            this.mapas[n].CargarMapa(mapasGraf[n]);
     }
     
     public Mapa getMapa(int nivel){
@@ -27,25 +27,6 @@ public class GestorMapas {
             return mapas[nivel];
         else
             return null;
-    }
-
-    public void updateGrafToNormal(int nivel){
-        this.mapas[nivel].CargarMapa(mapasGraf[nivel]);
-    }
-    
-    public boolean personajeEnAccion(Personaje p,int nivel){
-        for (int f = 0; f < 12; f++)
-            for (int c = 0; c < 16; c++){
-                if (mapasGraf[nivel][f][c] == 'a'){
-                    //Personaje 1
-                    return (p.getPosX() == c && p.getPosY() == f);
-                }
-                if (mapasGraf[nivel][f][c] == 'b'){
-                    //Personaje 2
-                    return (p.getPosX() == c && p.getPosY() == f);
-                }  
-            }
-        return false;
     }
     
     private void setMapaGrafico(){
@@ -71,8 +52,8 @@ public class GestorMapas {
             {'S', 'S', 'S', 'S', 't', 'S', 'S', 'S', 'S', 'L', 'L', 'L', 'L', 'L', 'L', 'L'},
             {'S', 'S', 'S', 'S', 't', 'S', 'S', 'S', 'S', 'L', 'L', 'L', 'L', 'L', 'L', 'L'},
             {'S', 'S', 'C', 'S', 't', 'S', 'S', 'S', 'S', 'L', 'L', 'L', 'L', 'L', 'L', 'L'},
-            {'S', 'S', 'S', 'S', 't', 'S', 'S', 'S', 'D', 'L', 'L', 'L', 'o', 'o', 'o', 'o'},
-            {'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'L', 'L', 'L', 'o', 'o', 'o', 'o'},
+            {'S', 'S', 'S', 'S', 't', 'S', 'S', 'S', 'D', 'L', 'L', 'L', 'o', 'o', 'o', 'F'},
+            {'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'L', 'L', 'L', 'o', 'o', 'o', 'F'},
             {'S', 'N', 'N', 'm', 'N', 'N', 'N', 'N', 'D', 'L', 'L', 'L', 'L', 'L', 'L', 'L'},
             {'S', 'N', 'N', 'm', 'N', 'N', 'N', 'N', 'N', 'L', 'L', 'L', 'L', 'L', 'L', 'L'},
             {'S', 'N', 'N', 'm', 'N', 'h', 'h', 'N', 'N', 'L', 'L', 'L', 'L', 'L', 'L', 'L'},

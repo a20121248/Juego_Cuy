@@ -1,5 +1,6 @@
 package Controller;
 import Model.*;
+import java.util.List;
 
 /**
  *
@@ -13,22 +14,37 @@ public class InterpreteComandos {
         if ("QEQE".equals(accion)){
             /*Para p1*/
             Celda celda = mapa.getMapaAt( p1.getPosY(),p1.getPosX());
-            ((Terreno) celda.getObj()).setTipo(1);
+            ((Terreno) celda.getObj()).setActivo(false);
+            //ACTIVAR TERRENO DUO
+            List listaDuo = mapa.getListDuo();
+            for (int i = 0; i < listaDuo.size();i++){
+                Terreno terreno = (Terreno) listaDuo.get(i);
+                terreno.setActivo(true);
+            }
             return true;
         }
         else if("UOUO".equals(accion)){
             /*Para p2*/
             Celda celda = mapa.getMapaAt( p2.getPosY(),p2.getPosX());
-            ((Terreno) celda.getObj()).setTipo(2);
+            ((Terreno) celda.getObj()).setActivo(false);
+            //ACTIVAR TERRENO DUO
+            List listaDuo = mapa.getListDuo();
+            for (int i = 0; i < listaDuo.size();i++){
+                Terreno terreno = (Terreno) listaDuo.get(i);
+                terreno.setActivo(true);
+            }
             return true;
         } 
         else if ("XXX".equals(accion)) {
             /*Para p1 y  p2*/
+            //DESACTIVA TERRENO DUO
             Celda celda1 = mapa.getMapaAt( p1.getPosY(),p1.getPosX());
             Celda celda2 = mapa.getMapaAt( p2.getPosY(),p2.getPosX());
-            ((Terreno) celda1.getObj()).setTipo(1);
-            ((Terreno) celda2.getObj()).setTipo(2);
+            ((Terreno) celda1.getObj()).setActivo(false);
+            ((Terreno) celda2.getObj()).setActivo(false);
             return true;
+            
+            
         }else{
             /*Pierde Vida*/
             p1.setVida(p1.getVida() - 1);

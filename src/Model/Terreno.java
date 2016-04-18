@@ -11,20 +11,23 @@ package Model;
  */
 public class Terreno extends Dibujable{
     private int tipo;
+    private boolean activo;
     /*1-> terreno p1 (A)
      *2-> terreno p2 (B)
      *3-> terreno accion simple
      *4-> terreno accion duo
-     *4-> terreno trigger
-     *5-> background
-     *6-> terreno final Usado 
+     *5-> terreno trigger
+     *6-> terreno final Usado´como meta 
+     *7-> background
     */
     public Terreno(char elementoGrafico,int alto, int ancho,int tipo){
         super(elementoGrafico,alto, ancho);
+        this.activo = elementoGrafico != 'D';
         this.tipo = tipo;
     }
     public Terreno(char elementoGrafico, int tipo){
         super(elementoGrafico);
+        this.activo = elementoGrafico != 'D';
         this.tipo = tipo;
     }
     public void setTipo(int value){
@@ -32,5 +35,11 @@ public class Terreno extends Dibujable{
     }
     public int getTipo(){
         return this.tipo;
+    }
+    public void setActivo(boolean value){
+        this.activo = value;
+    }
+    public boolean getActivo(){
+        return this.activo;
     }
 }

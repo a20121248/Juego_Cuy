@@ -8,6 +8,7 @@ public class Personaje extends Dibujable{
     private int vida;
     private int posX;
     private int posY;
+    private int idPlayer; /*1-> playerA 2-> playerB*/
     static int N = 10;
     
     public Personaje(char elementoGrafico){

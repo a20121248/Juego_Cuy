@@ -87,7 +87,7 @@ public class Juego {
         Dibujable obj1 = m.getMapaAt(posY1, posX1).getObj();
         Dibujable obj2  = m.getMapaAt(posY2, posX2).getObj();
         if (obj1 instanceof Terreno )
-            if (((Terreno) obj1).getTipo() == 3){
+            if (((Terreno) obj1).getTipo() == 3 && ((Terreno) obj1).getActivo()){
                 System.out.print("Escriba la accion(QEQE): ");
                 accion = scan.nextLine();
                 /*EJECUTA ACCION ESPECIAL SEGUN NIVEL*/
@@ -96,7 +96,7 @@ public class Juego {
             }
         
         if (obj2 instanceof Terreno)
-            if (((Terreno) obj2).getTipo() == 3){
+            if (((Terreno) obj2).getTipo() == 3 && ((Terreno) obj2).getActivo()){
                 System.out.print("Escriba la accion(UOUO): ");
                 accion = scan.nextLine();
                 /*EJECUTA ACCION ESPECIAL SEGUN NIVEL*/
@@ -104,7 +104,9 @@ public class Juego {
                 return;
             } else if (obj1 instanceof Terreno){
                 if (((Terreno) obj1).getTipo() == 4 && 
-                    ((Terreno) obj2).getTipo() == 4){
+                    ((Terreno) obj2).getTipo() == 4 &&
+                    ((Terreno) obj1).getActivo()    &&
+                    ((Terreno) obj2).getActivo()){
                     System.out.print("Escriba la accion duo(XXX): ");
                     accion = scan.nextLine();
                     /*EJECUTA ACCION DUO SEGUN NIVEL*/
