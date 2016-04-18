@@ -12,6 +12,7 @@ public class InterpreteComandos {
         Mapa m = gm.getMapa(nivel);
         int newPosX = posX;
         int newPosY = posY;
+        
         switch (dir) {
             case 1:
                 newPosX = newPosX - 1; //Mover a la izquierda
@@ -45,11 +46,64 @@ public class InterpreteComandos {
         else if("UOUO".equals(accion)){
             /*Para p2*/
             return true;
-        } else{
+        } 
+        else if ("XXX".equals(accion)) {
+            /*Para p1 y  p2*/
+            return true;
+        }else{
             /*Pierde Vida*/
             p1.setVida(p1.getVida() - 1);
             p2.setVida(p2.getVida() - 1);
             return false;
+        }
+    }
+    
+    public void interpretaMovimiento(char c, Personaje p1, Personaje p2,
+            GestorMapas gm,int nivel,Enemigo enemigo){
+        int difX = 0;
+        int difY = 0;
+        int personaje = 0;
+        
+        if (c == 'W'){
+            difY = -1; personaje = 1;
+        } else if (c == 'A'){
+            difX = -1;  personaje = 1;
+        } else if (c == 'S'){
+            difY = 1;   personaje = 1;
+        } else if (c == 'D'){
+            difX = 1;   personaje = 1;
+        }
+        if (personaje == 1){
+            int xFinal = p1.getPosX() + difX;
+            int yFinal = p1.getPosY() + difY;
+            if (xFinal >= 0 && xFinal < 16 && yFinal >= 0 && yFinal < 12){
+                Celda celda = gm.getMapa(nivel).getMapaAt(yFinal, xFinal);
+                if (celda != null && celda.getObj() instanceof Terreno){
+                    p1.setPosX(xFinal);
+                    p1.setPosY(yFinal);
+                }
+            }
+            return;
+        }
+        if (c == 'I'){
+            difY = -1; personaje = 2;
+        } else if (c == 'J'){
+            difX = -1;  personaje = 2;
+        } else if (c == 'K'){
+            difY = 1;   personaje = 2;
+        } else if (c == 'L'){
+            difX = 1;   personaje = 2;
+        }
+        if (personaje == 2){
+            int xFinal = p2.getPosX() + difX;
+            int yFinal = p2.getPosY() + difY;
+            if (xFinal >= 0 && xFinal < 16 && yFinal >= 0 && yFinal < 12){
+                Celda celda = gm.getMapa(nivel).getMapaAt(yFinal, xFinal);
+                if (celda != null && celda.getObj() instanceof Terreno){
+                    p2.setPosX(xFinal);
+                    p2.setPosY(yFinal);
+                }
+            }
         }
     }
     
