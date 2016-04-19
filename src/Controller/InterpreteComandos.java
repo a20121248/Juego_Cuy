@@ -80,8 +80,19 @@ public class InterpreteComandos {
                     if (t != 2 && t != 7 && t > 0 && t < 8){
                         p1.Mover(xFinal, yFinal);
                     }
+                    return;
                 }
-                    
+                //Cuando se encuntra sobre objeto ayuda
+                Celda celda1 = gm.getMapa(nivel).getMapaAt(p1.getPosY(), p1.getPosX());
+                if (celda != null && celda1 != null && 
+                        celda.getObj() instanceof Objeto &&
+                        celda1.getObj() instanceof Objeto){
+                    Objeto obj = (Objeto) celda.getObj();
+                    Objeto obj1 = (Objeto) celda1.getObj();
+                    if(obj.getTipo() == 2 && obj1.getTipo()== 2){
+                        p1.Mover(xFinal, yFinal);
+                    }
+                }
             }
             return;
         }
@@ -105,7 +116,19 @@ public class InterpreteComandos {
                     if (t != 1 && t != 7 && t > 0 && t < 8){
                         p2.Mover(xFinal, yFinal);
                     }
-                }       
+                    return;
+                }
+                //Cuando se encuntra sobre objeto ayuda
+                Celda celda2 = gm.getMapa(nivel).getMapaAt(p2.getPosY(), p2.getPosX());
+                if (celda != null && celda2 != null && 
+                        celda.getObj() instanceof Objeto &&
+                        celda2.getObj() instanceof Objeto){
+                    Objeto obj = (Objeto) celda.getObj();
+                    Objeto obj2 = (Objeto) celda2.getObj();
+                    if(obj.getTipo() == 2 && obj2.getTipo()== 2){
+                        p2.Mover(xFinal, yFinal);
+                    }
+                }
             }
         }
     }
