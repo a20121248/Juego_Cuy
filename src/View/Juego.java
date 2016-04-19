@@ -20,11 +20,11 @@ import org.w3c.dom.Element;
 
 
 public class Juego {
-    private final Renderizador rend;
-    private final InterpreteComandos lector;
-    private final GestorMapas gestorMapa;
-    private final Personaje p1;
-    private final Personaje p2;
+    private Renderizador rend;
+    private InterpreteComandos lector;
+    private GestorMapas gestorMapa;
+    private Personaje p1;
+    private Personaje p2;
     //private Enemigo enemigo;
     private final Scanner scan;
     private int nivel;
@@ -35,11 +35,7 @@ public class Juego {
         lector = new InterpreteComandos();
         gestorMapa = new GestorMapas();
         scan = new Scanner(System.in);
-        /*NIVEL 1*/
-        p1 = new Personaje('A');
-        nombre1 = "Player 1";
-        p2 = new Personaje('B');
-        nombre2 = "Player 2";
+        p1 = p2 = null;
         //enemigo = new Enemigo('E');
         nivel = 0;
         this.inicializarPersonajes(nivel);
@@ -304,6 +300,14 @@ public class Juego {
     private void inicializarPersonajes(int nivel){
         /*AQUI SE PUEDE REALIZAR LECTURA DE PERSONAJE Y ENEMIGO*/
         /*SUS DATOS, ETC*/
+        if (p1 == null){
+            p1 = new Personaje('A');
+            nombre1 = "Player 1";
+        }
+        if (p2 == null){
+            p2 = new Personaje('B');
+            nombre2 = "Player 2";
+        }
         if (nivel == 0){
             CargaDatosXML(0);
             if (p1.getVida() <= 0 || p2.getVida() <= 0){
