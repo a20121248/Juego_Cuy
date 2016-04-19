@@ -10,6 +10,13 @@ import java.io.IOException;
 import Controller.*;
 import Model.*;
 import java.util.List;
+import java.io.File;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
+import org.w3c.dom.Element;
 
 
 public class Juego {
@@ -298,49 +305,64 @@ public class Juego {
         /*AQUI SE PUEDE REALIZAR LECTURA DE PERSONAJE Y ENEMIGO*/
         /*SUS DATOS, ETC*/
         if (nivel == 0){
-            p1.setPosY(2);  p1.setPosX(0); 
-            p1.setAccionEspecial("WDEQ", nivel);
-            p2.setPosY(11);  p2.setPosX(0); 
-            p2.setAccionEspecial("", nivel);
-            p2.setAccionDuo("SDKIQEUO", nivel);
+            CargaDatosXML(0);
             if (p1.getVida() <= 0 || p2.getVida() <= 0){
                 p1.setVida(10);
                 p2.setVida(10);
             }
         }
         else if (nivel == 1){
-            p1.setPosY(5);  p1.setPosX(15);
-            p1.setAccionEspecial("SDQEQE", nivel);
-            p2.setPosY(9);  p2.setPosX(15);
-            p2.setAccionEspecial("JJUOJ", nivel);
-            p2.setAccionDuo("", nivel);
+            CargaDatosXML(1);
             if (p1.getVida() <= 0 || p2.getVida() <= 0){
                 p1.setVida(10);
                 p2.setVida(10);
             }
         }
         else if (nivel == 2){
-            p1.setPosY(5);  p1.setPosX(0);
-            p1.setAccionEspecial("SDEWD", nivel);
-            p2.setPosY(10);  p2.setPosX(0);
-            p2.setAccionEspecial("", nivel);
-            p1.setAccionDuo("SIQEUOKLSD", nivel);
+            CargaDatosXML(2);
             if (p1.getVida() <= 0 || p2.getVida() <= 0){
                 p1.setVida(10);
                 p2.setVida(10);
             }
         } else if (nivel == 3){
-            p1.setPosY(5);  p1.setPosX(15);
-            p1.setAccionEspecial("WQEWW", nivel);
-            p2.setPosY(9);  p2.setPosX(15);
-            p2.setAccionEspecial("KLIUOJ", nivel);
-            p2.setAccionDuo("", nivel);
+            CargaDatosXML(3);
             if (p1.getVida() <= 0 || p2.getVida() <= 0){
                 p1.setVida(10);
                 p2.setVida(10);
             }
         }
     }
+    
+    private void CargaDatosXML(int nivel){
+        try {	
+         File inputFile = new File("niveles.xml");
+         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+         Document doc = dBuilder.parse(inputFile);
+         doc.getDocumentElement().normalize();
+         NodeList nList = doc.getElementsByTagName("Nivel");
+         Node nNode = nList.item(nivel);
+         Element eElement = (Element) nNode;
+         p1.setPosY(Integer.parseInt(eElement.
+                           getElementsByTagName("p1PosY").item(0).getTextContent()));
+         p1.setPosX(Integer.parseInt(eElement.
+                           getElementsByTagName("p1PosX").item(0).getTextContent()));
+         p1.setAccionEspecial(eElement.
+                           getElementsByTagName("p1AccEsp").item(0).getTextContent(), nivel);
+         p2.setPosY(Integer.parseInt(eElement.
+                           getElementsByTagName("p2PosY").item(0).getTextContent()));
+         p2.setPosX(Integer.parseInt(eElement.
+                           getElementsByTagName("p2PosX").item(0).getTextContent())); 
+         p2.setAccionEspecial(eElement.
+                           getElementsByTagName("p2AccEsp").item(0).getTextContent(), nivel);
+         p2.setAccionDuo(eElement.
+                           getElementsByTagName("AccDuo").item(0).getTextContent(), nivel);
+      } catch (Exception e) {
+         e.printStackTrace();
+      }
+    }    
+    
+    
     private void inicializarActividad(int nivel){
         Mapa mapa = gestorMapa.getMapa(nivel);
         if (nivel == 0){
