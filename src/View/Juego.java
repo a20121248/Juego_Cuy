@@ -28,7 +28,6 @@ public class Juego {
     //private Enemigo enemigo;
     private final Scanner scan;
     private int nivel;
-    private String nombre1, nombre2;
     
     public Juego(){
         rend = new Renderizador();
@@ -48,41 +47,55 @@ public class Juego {
         System.out.println("(Presiona ENTER para continuar...)");
         Scanner sc = new Scanner(System.in);
         sc.nextLine();
-        do{
-            cleanWindow();
+        cleanWindow();
+        do {            
             System.out.println("1. Empezar el juego");
             System.out.println("2. Salir");
+            //Leer opción
             int opc = 0;
-            try{
-                opc =  scan.nextInt();
-            } catch (java.util.InputMismatchException ex){
-                scan.nextLine();
-            }
+            String aux = scan.nextLine();
+            try {
+                opc = Integer.parseInt(aux);
+            } catch (NumberFormatException ex) {
+                System.out.println("Error: Ingrese una opcion valida.");
+                System.out.println();
+                continue;
+            }            
             if (opc == 1) {
-                /*NIVEL 1*/
-                /*COMPLETAR: LEER NOMBRES*/
+                /* Leer nombres de jugadores */
+                cleanWindow();
+                System.out.println("Ingrese el nombre del primer jugador:");
+                this.p1.setNombre(scan.nextLine());
+                System.out.println("Ingrese el nombre del segundo jugador:");
+                this.p2.setNombre(scan.nextLine());
+                cleanWindow();              
                 if (nivel >= gestorMapa.getNumNiveles()) {
                     nivel = 0;
                     p1.setVida(10);
                 }
                 inicializarPersonajes(nivel);
                 inicializarActividad(nivel);
-                scan.nextLine();
                 return false;
             }
             else if (opc == 2){
                 confirmarFinJuego();
+            } else if (opc == 3) {
+                //CARGAR ARCHIVO GUARDADO
+                //inicializarPersonajes(nivel);
+                //inicializarActividad(nivel);
+                //return false;
             }
-        } while(true);
+        } while (true);
         
     }
     private void confirmarFinJuego(){
         System.out.println("Desea salir? (1. Si, 2. No)");
         int salir = 0;
-        try{
-            salir = scan.nextInt();
-        } catch (java.util.InputMismatchException ex){
-            scan.nextLine();
+        String aux = scan.nextLine();
+        try {
+            salir = Integer.parseInt(aux);
+        } catch (NumberFormatException ex){
+            //Regresará al menú principal
         }
         if (salir == 1){
             System.exit(1);
@@ -97,7 +110,7 @@ public class Juego {
         Dibujable obj2  = m.getMapaAt(posY2, posX2).getObj();
         if (obj1 instanceof Terreno )
             if (((Terreno) obj1).getTipo() == 3 && ((Terreno) obj1).getActivo()){
-                System.out.print("Escriba la accion(" + p1.getAccionEspecial(nivel) +"): ");
+                System.out.print("Escriba la accion (" + p1.getAccionEspecial(nivel) +"): ");
                 accion = scan.nextLine();
                 /*EJECUTA ACCION ESPECIAL SEGUN NIVEL*/
                 boolean exito = lector.interpretaAccionEspecial(accion,gestorMapa.getMapa(nivel), p1, p2,nivel);
@@ -108,7 +121,7 @@ public class Juego {
         
         if (obj2 instanceof Terreno)
             if (((Terreno) obj2).getTipo() == 3 && ((Terreno) obj2).getActivo()){
-                System.out.print("Escriba la accion("+ p2.getAccionEspecial(nivel)+ "): ");
+                System.out.print("Escriba la accion ("+ p2.getAccionEspecial(nivel)+ "): ");
                 accion = scan.nextLine();
                 /*EJECUTA ACCION ESPECIAL SEGUN NIVEL*/
                 boolean exito = lector.interpretaAccionEspecial(accion,gestorMapa.getMapa(nivel), p1, p2,nivel);
@@ -120,7 +133,7 @@ public class Juego {
                     ((Terreno) obj2).getTipo() == 4 &&
                     ((Terreno) obj1).getActivo()    &&
                     ((Terreno) obj2).getActivo()){
-                    System.out.print("Escriba la accion duo(" + p2.getAccionDuo(nivel) + "): ");
+                    System.out.print("Escriba la accion duo (" + p2.getAccionDuo(nivel) + "): ");
                     accion = scan.nextLine();
                     /*EJECUTA ACCION DUO SEGUN NIVEL*/
                     boolean exito = lector.interpretaAccionEspecial(accion,gestorMapa.getMapa(nivel), p1, p2,nivel);
@@ -298,8 +311,8 @@ public class Juego {
     private void renderizar() throws IOException, InterruptedException{
         cleanWindow();
         /*MOSTRAR MAPA*/
-        System.out.print("Jugador 1: " + this.nombre1);
-        System.out.println("\tJugador 2: " + this.nombre2);
+        System.out.print("Jugador 1: " + this.p1.getNombre());
+        System.out.println("\tJugador 2: " + this.p2.getNombre());
         System.out.println("Puntos de vida: " + p1.getVida());
         System.out.println("Nivel: " + nivel);
         rend.mostrarMapa(gestorMapa,nivel,p1,p2);
@@ -314,14 +327,10 @@ public class Juego {
     private void inicializarPersonajes(int nivel){
         /*AQUI SE PUEDE REALIZAR LECTURA DE PERSONAJE Y ENEMIGO*/
         /*SUS DATOS, ETC*/
-        if (p1 == null){
+        if (p1 == null)
             p1 = new Personaje('A');
-            nombre1 = "Player 1";
-        }
-        if (p2 == null){
+        if (p2 == null)
             p2 = new Personaje('B');
-            nombre2 = "Player 2";
-        }
         if (p1.getVida() <= 0)
             p1.setVida(10);
         if (nivel == 0)
@@ -335,7 +344,7 @@ public class Juego {
         
     }
     
-    private void CargaDatosXML(int nivel){
+    private void CargaDatosXML(int nivel) {
         try {	
          File inputFile = new File("niveles.xml");
          DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -408,8 +417,9 @@ public class Juego {
         }
     }
     
-    private void cleanWindow() throws IOException, InterruptedException{
-        new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor(); //Limpia ventana
+    private void cleanWindow() throws IOException, InterruptedException {
+        //Limpia la ventana (solo funciona en consola)
+        new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
     }
 }
 
