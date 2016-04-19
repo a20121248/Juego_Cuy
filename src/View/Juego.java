@@ -108,6 +108,9 @@ public class Juego {
         Mapa m = this.gestorMapa.getMapa(nivel);
         Dibujable obj1 = m.getMapaAt(posY1, posX1).getObj();
         Dibujable obj2  = m.getMapaAt(posY2, posX2).getObj();
+        
+        /************** PRIMER CASO: ACCIÓN ESPECIAL **************/
+        
         if (obj1 instanceof Terreno )
             if (((Terreno) obj1).getTipo() == 3 && ((Terreno) obj1).getActivo()){
                 System.out.print("Escriba la accion (" + p1.getAccionEspecial(nivel) +"): ");
@@ -143,9 +146,32 @@ public class Juego {
                 }
             }
         
-        System.out.print("Escriba la accion mover(W-A-S-D / I-J-K-L): ");
+        /************** SEGUNDO CASO: MOVIMIENTO COMÚN **************/
+        
+        System.out.print("Escriba la accion mover (W-A-S-D / I-J-K-L): ");
         accion = scan.nextLine();
-        lector.interpretaMovimiento(accion, p1,p2,gestorMapa,nivel);
+        
+        //Verificar el tipo de comando
+        
+        if (accion.equalsIgnoreCase("SAVE")) { //GUARDAR PARTIDA
+            lector.guardarPartida();
+            System.out.println("Partida guardada correctamente!");
+            System.out.println("(presione ENTER para continuar)");
+            scan.nextLine();
+        } 
+        
+        else if (accion.equalsIgnoreCase("EXIT")) { //SALIR DEL JUEGO
+            System.out.println();
+            System.out.println("Realmente desea salir del juego? (1. Si, 2. No)");
+            try {
+                int opcion = Integer.parseInt(scan.nextLine());
+                if (opcion == 1) this.p1.setVida(0);
+            } catch (NumberFormatException ex) {
+                //No hace nada, regresa a seguir jugando
+            }
+        }
+        
+        else lector.interpretaMovimiento(accion, p1, p2, gestorMapa, nivel);
     }
     
     private void ejecutarAccionEspecial(int player)throws IOException, InterruptedException{

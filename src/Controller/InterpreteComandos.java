@@ -40,7 +40,7 @@ public class InterpreteComandos {
     }
     
     public void interpretaMovimiento(String accion, Personaje p1, Personaje p2,
-            GestorMapas gm,int nivel){
+            GestorMapas gm, int nivel){
         int difX = 0;
         int difY = 0;
         int personaje = 0;
@@ -132,5 +132,9 @@ public class InterpreteComandos {
                 }
             }
         }
+    }
+    
+    public void guardarPartida() {
+        
     }
 }
