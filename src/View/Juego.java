@@ -41,7 +41,7 @@ public class Juego {
         p2 = new Personaje('B');
         nombre2 = "Player 2";
         //enemigo = new Enemigo('E');
-        nivel = 0;
+        nivel = 2;
         this.inicializarPersonajes(nivel);
         this.inicializarActividad(nivel);
     }
