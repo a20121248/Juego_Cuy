@@ -61,7 +61,10 @@ public class Juego {
             if (opc == 1) {
                 /*NIVEL 1*/
                 /*COMPLETAR: LEER NOMBRES*/
-                if (nivel >= gestorMapa.getNumNiveles()) nivel = 0;
+                if (nivel >= gestorMapa.getNumNiveles()) {
+                    nivel = 0;
+                    p1.setVida(10);
+                }
                 inicializarPersonajes(nivel);
                 inicializarActividad(nivel);
                 scan.nextLine();
@@ -319,33 +322,17 @@ public class Juego {
             p2 = new Personaje('B');
             nombre2 = "Player 2";
         }
-        if (nivel == 0){
+        if (p1.getVida() <= 0)
+            p1.setVida(10);
+        if (nivel == 0)
             CargaDatosXML(0);
-            if (p1.getVida() <= 0 || p2.getVida() <= 0){
-                p1.setVida(10);
-                p2.setVida(10);
-            }
-        }
-        else if (nivel == 1){
+        else if (nivel == 1)
             CargaDatosXML(1);
-            if (p1.getVida() <= 0 || p2.getVida() <= 0){
-                p1.setVida(10);
-                p2.setVida(10);
-            }
-        }
-        else if (nivel == 2){
+        else if (nivel == 2)
             CargaDatosXML(2);
-            if (p1.getVida() <= 0 || p2.getVida() <= 0){
-                p1.setVida(10);
-                p2.setVida(10);
-            }
-        } else if (nivel == 3){
+        else if (nivel == 3)
             CargaDatosXML(3);
-            if (p1.getVida() <= 0 || p2.getVida() <= 0){
-                p1.setVida(10);
-                p2.setVida(10);
-            }
-        }
+        
     }
     
     private void CargaDatosXML(int nivel){

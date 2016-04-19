@@ -35,7 +35,6 @@ public class InterpreteComandos {
         }else{
             /*Pierde Vida*/
             p1.setVida(p1.getVida() - 2);
-            p2.setVida(p2.getVida() - 2);
             return false;
         }
     }
