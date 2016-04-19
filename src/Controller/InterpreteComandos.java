@@ -59,6 +59,7 @@ public class InterpreteComandos {
         }
         if (personaje == 1){
             Celda celda1 = gm.getMapa(nivel).getMapaAt(p1.getPosY(), p1.getPosX());
+            //PARA QUE NO SE MUEVA CUANDO ESTÁ EN UN TRIGGER ACTIVO
             if (celda1.getObj() instanceof Terreno){
                 Terreno ter = (Terreno) celda1.getObj();
                 if (ter.getActivo() && ter.getTipo()==5){
@@ -101,6 +102,7 @@ public class InterpreteComandos {
         }
         if (personaje == 2){
             Celda celda2 = gm.getMapa(nivel).getMapaAt(p2.getPosY(), p2.getPosX());
+            //PARA QUE NO SE MUEVA CUANDO ESTÁ EN UN TRIGGER ACTIVO
             if (celda2.getObj() instanceof Terreno){
                 Terreno ter = (Terreno) celda2.getObj();
                 if (ter.getActivo() && ter.getTipo()==5){

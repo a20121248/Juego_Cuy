@@ -11,7 +11,7 @@ package Model;
  */
 public class Objeto extends Dibujable {
     //1 = obstáculo, 2 = objeto de ayuda
-    private int tipo; 
+    private int tipo;
     
     public Objeto(char elementoGrafico,int tipo) {
         super(elementoGrafico);

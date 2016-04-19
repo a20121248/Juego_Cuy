@@ -143,9 +143,9 @@ public class Juego {
                     scan.nextLine();
                 }
                 //ACTIVAR TERRENOS
-                List listaDuo = gestorMapa.getMapa(nivel).getListaTerrenoInactivo();
-                for (int i = 0; i < listaDuo.size(); i++){
-                    Terreno terreno = (Terreno) listaDuo.get(i);
+                List listaTerrenoInactivos = gestorMapa.getMapa(nivel).getListaTerrenoInactivo();
+                for (int i = 0; i < listaTerrenoInactivos.size(); i++){
+                    Terreno terreno = (Terreno) listaTerrenoInactivos.get(i);
                     terreno.setActivo(true);
                 }
             }
@@ -223,9 +223,9 @@ public class Juego {
                     scan.nextLine();
                 }
                 //ACTIVAR TERRENOS
-                List listaDuo = gestorMapa.getMapa(nivel).getListaTerrenoInactivo();
-                for (int i = 0; i < listaDuo.size(); i++){
-                    Terreno terreno = (Terreno) listaDuo.get(i);
+                List listaTerrenoInactivos = gestorMapa.getMapa(nivel).getListaTerrenoInactivo();
+                for (int i = 0; i < listaTerrenoInactivos.size(); i++){
+                    Terreno terreno = (Terreno) listaTerrenoInactivos.get(i);
                     terreno.setActivo(true);
                 }
             } else if (player == 2){
@@ -250,9 +250,13 @@ public class Juego {
             }
         } else if (nivel == 3){//NIVEL CON ENEMIGO
             if (player == 1){
-                //SOMETHING
+                //ANIMARLO
+                //MATA ENEMIGO 2
+                //DESACTIVA TRIGGER 2
             } else if (player == 2){
-                //SOMETHING
+                //ANIMARLO
+                //MATA ENEMIGO 1
+                //DESACTIVA TRIGGER 1
             } else if (player == 3){
                 //NOTHING
             }
@@ -280,6 +284,13 @@ public class Juego {
                 inicializarActividad(nivel);
             }
         }
+        if (celda1.getObj() instanceof Terreno || celda2.getObj() instanceof Terreno){
+            if (true){
+                //ACTIVE LA VISIBILIDAD DEL ENEMIGO Y QUE LO MUESTRE
+                //DISMINUIR LA VIDA DEL JUGADOR 1
+            }
+        }
+    
     }
     private void renderizar() throws IOException, InterruptedException{
         cleanWindow();
