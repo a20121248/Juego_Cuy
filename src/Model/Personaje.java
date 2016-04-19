@@ -17,6 +17,7 @@ public class Personaje extends Dibujable{
     public Personaje(char elementoGrafico){
         super(elementoGrafico);
         this.vida = 10;
+        this.nombre = null;
         this.accionEspecial = new String[5];
     }   
     public Personaje (int posX, int posY, char elementoGrafico) {
@@ -24,6 +25,7 @@ public class Personaje extends Dibujable{
         this.vida = 10;
         this.posX = posX;
         this.posY = posY;
+        this.nombre = null;
         this.accionEspecial = new String[5];
     }
     public Personaje (int posX, int posY,char elementoGrafico,int alto, int ancho) {
@@ -31,6 +33,7 @@ public class Personaje extends Dibujable{
         this.vida = 10;
         this.posX = posX;
         this.posY = posY;
+        this.nombre = null;
         this.accionEspecial = new String[5];
     }
 

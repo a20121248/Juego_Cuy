@@ -64,11 +64,18 @@ public class Juego {
             if (opc == 1) {
                 /* Leer nombres de jugadores */
                 cleanWindow();
-                System.out.println("Ingrese el nombre del primer jugador:");
-                this.p1.setNombre(scan.nextLine());
-                System.out.println("Ingrese el nombre del segundo jugador:");
-                this.p2.setNombre(scan.nextLine());
+                
+                //Si ya se jugó una partida anterior ya no se piden los nombres
+                
+                if (this.p1.getNombre() == null || this.p2.getNombre() == null) {
+                    System.out.println("Ingrese el nombre del primer jugador:");
+                    this.p1.setNombre(scan.nextLine());
+                    System.out.println("Ingrese el nombre del segundo jugador:");
+                    this.p2.setNombre(scan.nextLine());
+                }
+                
                 cleanWindow();              
+                
                 if (nivel >= gestorMapa.getNumNiveles()) {
                     nivel = 0;
                     p1.setVida(10);
