@@ -11,7 +11,7 @@ public class Mapa {
     private Celda[][] mapa;
     static int filas = 12;
     static int columnas = 16;
-    List<Dibujable> listaDuo;
+    List listaDuo;
     
     public Mapa() {
         mapa = new Celda[filas][columnas];
@@ -31,19 +31,8 @@ public class Mapa {
         if (columna < 0 || columna >= 16) return null;
         return mapa[fila][columna];
     }
-    public List<Dibujable> getListDuo(){
+    public List getListDuo(){
         return this.listaDuo;
     }
-//    public void CargarMapa(char[][] mapa){
-//        for (int i = 0; i < filas; i++)
-//            for (int j = 0; j < columnas; j++){
-//                
-//                this.mapa[i][j] = charToCelda(mapa[i][j]);
-//                
-//                if ((this.mapa[i][j].getObj() instanceof Terreno) &&
-//                     ((Terreno) this.mapa[i][j].getObj()).getTipo() == 4)
-//                    listaDuo.add((Terreno) this.mapa[i][j].getObj());
-//            }
-//    }
-//    
+
 }

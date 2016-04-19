@@ -41,8 +41,15 @@ public class GestorMapas {
         String linea; int fila = 0;
         while ((linea = br.readLine()) != null) {
             char[] aux = linea.toCharArray();
-            for (int col = 0; col < linea.length(); col++)
-                mapas[nivel].setMapaAt(fila, col, charToDibujable(aux[col]));
+            for (int col = 0; col < linea.length(); col++){
+                Dibujable dib = charToDibujable(aux[col]);
+                mapas[nivel].setMapaAt(fila, col, dib);
+                if (dib instanceof Terreno)
+                    if (((Terreno)dib).getTipo() == 4){
+                        mapas[nivel].getListDuo().add(dib);
+                    }
+            }
+                
             fila++;
         }
     }
@@ -71,7 +78,7 @@ public class GestorMapas {
     }
     
     public Mapa getMapa(int nivel){
-        if (nivel >= 0 && nivel < 4)
+        if (nivel >= 0 && nivel < numNiveles)
             return mapas[nivel];
         else
             return null;

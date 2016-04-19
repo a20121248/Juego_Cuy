@@ -30,8 +30,8 @@ public class Juego {
         /*NIVEL 1*/
         p1 = new Personaje('A');
         nombre1 = "Player 1";
-        nombre2 = "Player 2";
         p2 = new Personaje('B');
+        nombre2 = "Player 2";
         //enemigo = new Enemigo('E');
         nivel = 0;
         this.inicializarPersonajes(nivel);
@@ -128,22 +128,25 @@ public class Juego {
     private void ejecutarAccionEspecial(int player)throws IOException, InterruptedException{
         /*PLAYER INDICA QUE JUGADOR MANDÓ LA ACCION*/
         if (nivel == 0){
+            
+        }
+        else if (nivel == 1){
             if (player == 1){
                 //RECORRE TERRITORIO
                 int xOrig = p1.getPosX(); int yOrig = p1.getPosY();
                 p1.setPosY(yOrig + 1);
                 this.renderizar();
-                System.out.println("\nPresiona ENTER para continuar...");
+                System.out.println("Presiona ENTER para continuar...");
                 scan.nextLine();
                 /////
                 p1.setPosY(yOrig + 2);
                 this.renderizar();
-                System.out.println("\nPresiona ENTER para continuar...");
+                System.out.println("Presiona ENTER para continuar...");
                 scan.nextLine();
                 /////
                 p1.setPosY(yOrig + 4);
                 this.renderizar();
-                System.out.println("\nPresiona ENTER para continuar...");
+                System.out.println("Presiona ENTER para continuar...");
                 scan.nextLine();
                 //AQUI DESTRUYE ESAS COSAS
                 Celda celda1 = gestorMapa.getMapa(nivel).getMapaAt(yOrig + 4, xOrig);
@@ -151,7 +154,7 @@ public class Juego {
                 celda1.setObj(new Terreno('N',2));
                 celda2.setObj(new Terreno('N',2));
                 this.renderizar();
-                System.out.println("\nPresiona ENTER para continuar...");
+                System.out.println("Presiona ENTER para continuar...");
                 scan.nextLine();
                 //VUELVE AL ORIGINAL
                 p1.setPosX(xOrig);  p1.setPosY(yOrig);
@@ -161,7 +164,7 @@ public class Juego {
                 int xOrig = p2.getPosX(); int yOrig = p2.getPosY();
                 p2.setPosX(xOrig - 1);
                 this.renderizar();
-                System.out.println("\nPresiona ENTER para continuar...");
+                System.out.println("Presiona ENTER para continuar...");
                 scan.nextLine();
                 /////
                 p2.setPosX(xOrig - 2);
@@ -169,13 +172,15 @@ public class Juego {
                 Celda celda = gestorMapa.getMapa(nivel).getMapaAt(yOrig, xOrig - 1);
                 celda.setObj(new Terreno('N',2));
                 this.renderizar();
-                System.out.println("\nPresiona ENTER para continuar...");
+                System.out.println("Presiona ENTER para continuar...");
                 scan.nextLine();
             } else if (player == 3){
                 //NOTHING
             }
+        } else if (nivel == 2){
+            //COMPLETAR EL OTRO NIVEL
         }
-        //COMPLETAR EL OTRO NIVEL
+        
     }
     
     private void actualizarInfo()throws IOException, InterruptedException{
@@ -192,8 +197,7 @@ public class Juego {
                 ((Terreno)celda2.getObj()).getTipo() == 6){
                 renderizar();
                 nivel += 1;
-                System.out.print("Acabaste el nivel ");
-                System.out.print(nivel);
+                System.out.print("Acabaste el nivel " + (nivel - 1));
                 System.out.print(". Presiona ENTER para continuar...");
                 scan.nextLine();
                 inicializarPersonajes(nivel);
@@ -206,32 +210,51 @@ public class Juego {
         System.out.print("Jugador 1: " + this.nombre1);
         System.out.println("\tJugador 2: " + this.nombre2);
         System.out.println("Puntos de vida: " + p1.getVida());
-        System.out.println("Nivel: " + (nivel + 1));
+        System.out.println("Nivel: " + nivel);
         rend.mostrarMapa(gestorMapa,nivel,p1,p2);
     }
     
     private boolean finJuego(){        
-        /*TOPE NIVEL: 2 (cantidad de mapas)*/
+        /*TOPE NIVEL: 3 (cantidad de mapas)*/
         /*Si ha muerto o terminó todos los niveles*/
-        return (p1.getVida() <= 0) || (nivel == 2);
+        return (p1.getVida() <= 0) || (nivel == 3);
     }
     
     private void inicializarPersonajes(int nivel){
         /*AQUI SE PUEDE REALIZAR LECTURA DE PERSONAJE Y ENEMIGO*/
         /*SUS DATOS, ETC*/
         if (nivel == 0){
-            p1.setPosY(5);  p1.setPosX(15); p1.setVida(10);
+            p1.setPosY(2);  p1.setPosX(0); 
+            p1.setAccionEspecial("WDEQ", nivel);
+            p2.setPosY(11);  p2.setPosX(0); 
+            p2.setAccionEspecial("", nivel);
+            p2.setAccionDuo("SDKIQEUO", nivel);
+            if (p1.getVida() <= 0 || p2.getVida() <= 0){
+                p1.setVida(10);
+                p2.setVida(10);
+            }
+        }
+        else if (nivel == 1){
+            p1.setPosY(5);  p1.setPosX(15);
             p1.setAccionEspecial("SDQEQE", nivel);
-            p2.setPosY(9);  p2.setPosX(15); p2.setVida(10);
+            p2.setPosY(9);  p2.setPosX(15);
             p2.setAccionEspecial("JJUOJ", nivel);
             p2.setAccionDuo("", nivel);
+            if (p1.getVida() <= 0 || p2.getVida() <= 0){
+                p1.setVida(10);
+                p2.setVida(10);
+            }
         }
-        if (nivel == 1){
-            p1.setPosY(5);  p1.setPosX(0); p1.setVida(10);
+        else if (nivel == 2){
+            p1.setPosY(5);  p1.setPosX(0);
             p1.setAccionEspecial("SDEWD", nivel);
-            p2.setPosY(10);  p2.setPosX(0); p2.setVida(10);
+            p2.setPosY(10);  p2.setPosX(0);
             p2.setAccionEspecial("", nivel);
             p1.setAccionDuo("SIQEUOKLSD", nivel);
+            if (p1.getVida() <= 0 || p2.getVida() <= 0){
+                p1.setVida(10);
+                p2.setVida(10);
+            }
         }
     }
     

@@ -74,8 +74,14 @@ public class InterpreteComandos {
             int yFinal = p1.getPosY() + difY;
             if (xFinal >= 0 && xFinal < 16 && yFinal >= 0 && yFinal < 12){
                 Celda celda = gm.getMapa(nivel).getMapaAt(yFinal, xFinal);
-                if (celda != null && celda.getObj() instanceof Terreno)
-                    p1.Mover(xFinal, yFinal);
+                if (celda != null && celda.getObj() instanceof Terreno){
+                    Terreno terreno = (Terreno)celda.getObj();
+                    int t = terreno.getTipo();
+                    if (t != 2 && t != 7 && t > 0 && t < 8){
+                        p1.Mover(xFinal, yFinal);
+                    }
+                }
+                    
             }
             return;
         }
@@ -93,8 +99,13 @@ public class InterpreteComandos {
             int yFinal = p2.getPosY() + difY;
             if (xFinal >= 0 && xFinal < 16 && yFinal >= 0 && yFinal < 12){
                 Celda celda = gm.getMapa(nivel).getMapaAt(yFinal, xFinal);
-                if (celda != null && celda.getObj() instanceof Terreno)
-                    p2.Mover(xFinal, yFinal);
+                if (celda != null && celda.getObj() instanceof Terreno){
+                    Terreno terreno = (Terreno)celda.getObj();
+                    int t = terreno.getTipo();
+                    if (t != 1 && t != 7 && t > 0 && t < 8){
+                        p2.Mover(xFinal, yFinal);
+                    }
+                }       
             }
         }
     }
