@@ -76,4 +76,7 @@ public class GestorMapas {
         else
             return null;
     }
+    public int getNumNiveles(){
+        return this.numNiveles;
+    }
 }

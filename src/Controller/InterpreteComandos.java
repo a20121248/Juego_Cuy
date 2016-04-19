@@ -59,9 +59,11 @@ public class InterpreteComandos {
         }
         if (personaje == 1){
             Celda celda1 = gm.getMapa(nivel).getMapaAt(p1.getPosY(), p1.getPosX());
-            Terreno ter = (Terreno) celda1.getObj();
-            if (ter.getActivo() && ter.getTipo()==5){
+            if (celda1.getObj() instanceof Terreno){
+                Terreno ter = (Terreno) celda1.getObj();
+                if (ter.getActivo() && ter.getTipo()==5){
                 return;
+                }
             }
             int xFinal = p1.getPosX() + difX;
             int yFinal = p1.getPosY() + difY;
@@ -99,9 +101,11 @@ public class InterpreteComandos {
         }
         if (personaje == 2){
             Celda celda2 = gm.getMapa(nivel).getMapaAt(p2.getPosY(), p2.getPosX());
-            Terreno ter = (Terreno) celda2.getObj();
-            if (ter.getActivo() && ter.getTipo()==5){
-                return;
+            if (celda2.getObj() instanceof Terreno){
+                Terreno ter = (Terreno) celda2.getObj();
+                if (ter.getActivo() && ter.getTipo()==5){
+                    return;
+                }
             }
             int xFinal = p2.getPosX() + difX;
             int yFinal = p2.getPosY() + difY;

@@ -41,7 +41,7 @@ public class Juego {
         p2 = new Personaje('B');
         nombre2 = "Player 2";
         //enemigo = new Enemigo('E');
-        nivel = 2;
+        nivel = 0;
         this.inicializarPersonajes(nivel);
         this.inicializarActividad(nivel);
     }
@@ -65,7 +65,7 @@ public class Juego {
             if (opc == 1) {
                 /*NIVEL 1*/
                 /*COMPLETAR: LEER NOMBRES*/
-                if (nivel >= 4) nivel = 0;
+                if (nivel >= gestorMapa.getNumNiveles()) nivel = 0;
                 inicializarPersonajes(nivel);
                 inicializarActividad(nivel);
                 scan.nextLine();
@@ -296,9 +296,9 @@ public class Juego {
     }
     
     private boolean finJuego(){        
-        /*TOPE NIVEL: 4 (cantidad de mapas)*/
+        /*TOPE NIVEL: cantidad de mapas*/
         /*Si ha muerto o terminó todos los niveles*/
-        return (p1.getVida() <= 0) || (nivel == 4);
+        return (p1.getVida() <= 0) || (nivel == gestorMapa.getNumNiveles());
     }
     
     private void inicializarPersonajes(int nivel){
