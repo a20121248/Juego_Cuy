@@ -22,7 +22,7 @@ public class GestorMapas {
         
         for (int n = 0; n < numNiveles; n++) {
             try {
-                LeerArchivoMapa("Mapa" + n + ".txt");                
+                LeerArchivoMapa(n, "Mapa" + n + ".txt");                
             } catch (FileNotFoundException ex) {
                 System.out.println("No se encontraron los mapas del juego.");
                 Scanner sc = new Scanner(System.in);
@@ -35,10 +35,15 @@ public class GestorMapas {
         
     }
     
-    private void LeerArchivoMapa(String ruta) throws IOException, FileNotFoundException{
-        FileReader arch = new FileReader(ruta);
-        while (arch.ready()) {
-            arch.read();
+    private void LeerArchivoMapa(int nivel, String ruta) throws IOException,
+            FileNotFoundException {
+        BufferedReader br = new BufferedReader(new FileReader(ruta));
+        String linea; int fila = 0;
+        while ((linea = br.readLine()) != null) {
+            char[] aux = linea.toCharArray();
+            for (int col = 0; col < linea.length(); col++)
+                mapas[nivel].setMapaAt(fila, col, charToDibujable(aux[col]));
+            fila++;
         }
     }
     
