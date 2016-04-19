@@ -1,11 +1,11 @@
 package View;
+import java.io.FileWriter;
 import java.io.IOException;
 /**
  *
  * @author Godievski
  */
 public class Main {
-
     /**
      * @param args the command line arguments
      * @throws java.io.IOException

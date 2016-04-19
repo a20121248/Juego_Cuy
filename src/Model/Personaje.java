@@ -10,22 +10,27 @@ public class Personaje extends Dibujable{
     private int posY;
     private int idPlayer; /*1-> playerA 2-> playerB*/
     static int N = 10;
+    private String[] accionEspecial;
+    static String[] accionDuo = new String[2];
     
     public Personaje(char elementoGrafico){
         super(elementoGrafico);
         this.vida = N;
+        this.accionEspecial = new String[2];
     }   
     public Personaje (int posX, int posY, char elementoGrafico) {
         super(elementoGrafico);
         this.vida = N;
         this.posX = posX;
         this.posY = posY;
+        this.accionEspecial = new String[2];
     }
     public Personaje (int posX, int posY,char elementoGrafico,int alto, int ancho) {
         super(elementoGrafico,alto,ancho);
         this.vida = N;
         this.posX = posX;
         this.posY = posY;
+        this.accionEspecial = new String[2];
     }
 
     public void Mover(int x, int y){
@@ -56,5 +61,16 @@ public class Personaje extends Dibujable{
     public void setPosY(int posY) {
         this.posY = posY;
     }
-   
+    public void setAccionEspecial(String accion, int nivel){
+        this.accionEspecial[nivel] = accion;
+    }
+    public String getAccionEspecial(int nivel){
+        return this.accionEspecial[nivel];
+    }
+    public void setAccionDuo(String accion, int nivel){
+        accionDuo[nivel] = accion;
+    }
+    public String getAccionDuo(int nivel){
+        return accionDuo[nivel];
+    }
 }

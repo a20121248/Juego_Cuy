@@ -13,25 +13,56 @@ import java.util.logging.Logger;
  */
 public class GestorMapas {
     private Mapa[] mapas;
-    private char[][][] mapasGraf;
-    static int numNiveles = 2;
+    static int numNiveles = 3;
     
     public GestorMapas() {
         mapas = new Mapa[numNiveles];
         for (int niveles = 0; niveles < numNiveles; niveles++)
             mapas[niveles] = new Mapa();
-        mapasGraf = new char[numNiveles][12][16];
         
-        try {
-            setMapaGrafico();
-        } catch (FileNotFoundException ex) {
-            System.out.println("No se encontraron los mapas.");
-            Scanner sc = new Scanner(System.in);
-            sc.nextLine();
-            System.exit(1);
+        for (int n = 0; n < numNiveles; n++) {
+            try {
+                LeerArchivoMapa("Mapa" + n + ".txt");                
+            } catch (FileNotFoundException ex) {
+                System.out.println("No se encontraron los mapas del juego.");
+                Scanner sc = new Scanner(System.in);
+                sc.nextLine();
+                System.exit(1);
+            } catch (IOException ex) {
+                //Se terminó de leer el mapa
+            }
+        }       
+        
+    }
+    
+    private void LeerArchivoMapa(String ruta) throws IOException, FileNotFoundException{
+        FileReader arch = new FileReader(ruta);
+        while (arch.ready()) {
+            arch.read();
         }
-        for (int n = 0; n < numNiveles; n++)
-            this.mapas[n].CargarMapa(mapasGraf[n]);
+    }
+    
+    private Dibujable charToDibujable(char c){
+        Dibujable dib = null;
+        if (c == 'S') //Terreno de A
+            dib = new Terreno(c,1);
+        else if (c == 'N') //Terreno de B
+            dib = new Terreno(c,2);
+        else if (c == 'C') //Accion especial
+            dib = new Terreno(c,3);
+        else if (c == 'D') //Accion duo
+            dib = new Terreno(c,4);
+        else if (c == 'T') //Trigger enemigo
+            dib = new Terreno(c,5);
+        else if (c == 'F') //Terreno final
+            dib = new Terreno(c,6);
+        else if (c == 'g' || c == 'h' || c == 't' || c == 'm' 
+                || c == 'L' || c == 'p' || c == 'i' || c == 'd'
+                || c == 'j' || c == 'a')
+            dib = new Objeto(c,1);
+        else if (c == 'o')
+            dib = new Objeto(c,2);
+        return dib;
     }
     
     public Mapa getMapa(int nivel){
@@ -39,47 +70,5 @@ public class GestorMapas {
             return mapas[nivel];
         else
             return null;
-    }
-    
-    private void setMapaGrafico() throws FileNotFoundException{
-        FileReader arch;
-        //Deberia ser mayor igual
-        for (int i = 0; i < this.numNiveles; i++) {
-            arch = new FileReader("./src/Resources/Mapa" + i + ".txt");
-            
-        }
-        
-        char[][] nivel1 = {
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-            {'F', 'S', 'S', 'S', 'o', 'o', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S'},
-            {'F', 'S', 'S', 'S', 'o', 'o', 'S', 'S', 'C', 'S', 'S', 'S', 'S', 'S', 'S', 'S'},
-            {'F', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S'},
-            {'F', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S', 'S'},
-            {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
-            {'F', 'N', 'N', 'L', 'N', 'N', 'N', 'N', 'N', 'i', 'i', 'N', 'N', 'N', 'N', 'N'},
-            {'F', 'N', 'N', 'L', 'C', 'N', 'N', 'N', 'N', 'i', 'N', 'N', 'N', 'N', 'N', 'N'},
-            {'F', 'N', 'N', 'L', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'g', 'g', 'N', 'N', 'N'},
-            {'F', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'g', 'g', 'N', 'N', 'N'}
-        };
-        
-        char[][] nivel2 = {
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-            {'S', 'S', 'S', 'S', 't', 'S', 'S', 'S', 'S', 'L', 'L', 'L', 'L', 'L', 'L', 'L'},
-            {'S', 'S', 'S', 'S', 't', 'S', 'S', 'S', 'S', 'L', 'L', 'L', 'L', 'L', 'L', 'L'},
-            {'S', 'S', 'C', 'S', 't', 'S', 'S', 'S', 'S', 'L', 'L', 'L', 'L', 'L', 'L', 'L'},
-            {'S', 'S', 'S', 'S', 't', 'S', 'S', 'S', 'D', 'L', 'L', 'L', 'o', 'o', 'o', 'F'},
-            {'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'L', 'L', 'L', 'o', 'o', 'o', 'F'},
-            {'S', 'N', 'N', 'm', 'N', 'N', 'N', 'N', 'D', 'L', 'L', 'L', 'L', 'L', 'L', 'L'},
-            {'S', 'N', 'N', 'm', 'N', 'N', 'N', 'N', 'N', 'L', 'L', 'L', 'L', 'L', 'L', 'L'},
-            {'S', 'N', 'N', 'm', 'N', 'h', 'h', 'N', 'N', 'L', 'L', 'L', 'L', 'L', 'L', 'L'},
-            {'S', 'N', 'N', 'N', 'N', 'h', 'h', 'N', 'N', 'L', 'L', 'L', 'L', 'L', 'L', 'L'}
-        };
-        
-        mapasGraf[0] = nivel1;
-        mapasGraf[1] = nivel2;
     }
 }

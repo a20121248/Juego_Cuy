@@ -8,34 +8,35 @@ import java.util.List;
  */
 public class InterpreteComandos {
         
-    public boolean ejecutarAccionEspecial(String accion,Mapa mapa, Personaje p1, Personaje p2){
+    public boolean interpretaAccionEspecial(String accion,Mapa mapa, Personaje p1, Personaje p2, int nivel){
         if (accion == null || accion.length() <= 0 ) return false;
         accion = accion.toUpperCase();
-        if ("QEQE".equals(accion)){
-            /*Para p1*/
+        
+        if (p1.getAccionEspecial(nivel).equals(accion)){
+            /*PARA P1*/
             Celda celda = mapa.getMapaAt( p1.getPosY(),p1.getPosX());
             ((Terreno) celda.getObj()).setActivo(false);
             //ACTIVAR TERRENO DUO
             List listaDuo = mapa.getListDuo();
-            for (int i = 0; i < listaDuo.size();i++){
-                Terreno terreno = (Terreno) listaDuo.get(i);
-                terreno.setActivo(true);
-            }
-            return true;
-        }
-        else if("UOUO".equals(accion)){
-            /*Para p2*/
-            Celda celda = mapa.getMapaAt( p2.getPosY(),p2.getPosX());
-            ((Terreno) celda.getObj()).setActivo(false);
-            //ACTIVAR TERRENO DUO
-            List listaDuo = mapa.getListDuo();
-            for (int i = 0; i < listaDuo.size();i++){
+            for (int i = 0; i < listaDuo.size(); i++){
                 Terreno terreno = (Terreno) listaDuo.get(i);
                 terreno.setActivo(true);
             }
             return true;
         } 
-        else if ("XXX".equals(accion)) {
+        else if (p2.getAccionEspecial(nivel).equals(accion)){
+            /*PARA P2*/
+            Celda celda = mapa.getMapaAt( p2.getPosY(),p2.getPosX());
+            ((Terreno) celda.getObj()).setActivo(false);
+            //ACTIVAR TERRENO DUO
+            List listaDuo = mapa.getListDuo();
+            for (int i = 0; i < listaDuo.size(); i++){
+                Terreno terreno = (Terreno) listaDuo.get(i);
+                terreno.setActivo(true);
+            }
+            return true;
+        }
+        else if (p2.getAccionDuo(nivel).equals(accion)) {
             /*Para p1 y  p2*/
             //DESACTIVA TERRENO DUO
             Celda celda1 = mapa.getMapaAt( p1.getPosY(),p1.getPosX());
@@ -43,8 +44,6 @@ public class InterpreteComandos {
             ((Terreno) celda1.getObj()).setActivo(false);
             ((Terreno) celda2.getObj()).setActivo(false);
             return true;
-            
-            
         }else{
             /*Pierde Vida*/
             p1.setVida(p1.getVida() - 1);

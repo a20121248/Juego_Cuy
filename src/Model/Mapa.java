@@ -34,36 +34,16 @@ public class Mapa {
     public List<Dibujable> getListDuo(){
         return this.listaDuo;
     }
-    public void CargarMapa(char[][] mapa){
-        for (int i = 0; i < filas; i++)
-            for (int j = 0; j < columnas; j++){
-                this.mapa[i][j] = charToCelda(mapa[i][j]);
-                if ((this.mapa[i][j].getObj() instanceof Terreno) &&
-                     ((Terreno) this.mapa[i][j].getObj()).getTipo() == 4)
-                    listaDuo.add((Terreno) this.mapa[i][j].getObj());
-            }
-    }
-    private Celda charToCelda(char c){
-        Celda celda = new Celda();
-        if (c == 'S')
-            celda.setObj(new Terreno(c,1));
-        else if (c == 'N')
-            celda.setObj(new Terreno(c,2));
-        else if (c == 'C')
-            celda.setObj(new Terreno(c,3));
-        else if (c == 'D')
-            celda.setObj(new Terreno(c,4));
-        //Trigger enemigo (por si acaso, pero no tenemos enemigo)
-        else if (c == 'T') 
-            celda.setObj(new Terreno(c,5));
-        else if (c == 'F')
-            celda.setObj(new Terreno(c,6));
-        else if (c == 'g' || c == 'h' || c == 't' || c == 'm' 
-                || c == 'L' || c == 'p' || c == 'i' || c == 'd'
-                || c == 'j' || c == 'a')
-            celda.setObj(new Objeto(c,1));
-        else if (c == 'o')
-            celda.setObj(new Objeto(c,2));
-        return celda;
-    }
+//    public void CargarMapa(char[][] mapa){
+//        for (int i = 0; i < filas; i++)
+//            for (int j = 0; j < columnas; j++){
+//                
+//                this.mapa[i][j] = charToCelda(mapa[i][j]);
+//                
+//                if ((this.mapa[i][j].getObj() instanceof Terreno) &&
+//                     ((Terreno) this.mapa[i][j].getObj()).getTipo() == 4)
+//                    listaDuo.add((Terreno) this.mapa[i][j].getObj());
+//            }
+//    }
+//    
 }
