@@ -120,6 +120,7 @@ public class Juego {
                     return;
                 }
             }
+        
         System.out.print("Escriba la accion mover(W-A-S-D / I-J-K-L): ");
         accion = scan.nextLine();
         lector.interpretaMovimiento(accion, p1,p2,gestorMapa,nivel);
@@ -128,22 +129,50 @@ public class Juego {
     private void ejecutarAccionEspecial(int player)throws IOException, InterruptedException{
         /*PLAYER INDICA QUE JUGADOR MANDÓ LA ACCION*/
         if (nivel == 0){
-            
+            if (player == 1){
+                for (int i = 0; i < 3; i++){
+                    p1.setPosX(p1.getPosX() + 1);
+                    this.renderizar();
+                    System.out.println("Presiona ENTER para continuar...");
+                    scan.nextLine();
+                }
+            }
+            else if(player == 2){
+                //NOTHING
+            } else if (player == 3){
+                p1.setPosY(p1.getPosY()+1);
+                p2.setPosY(p2.getPosY()-1);
+                this.renderizar();
+                System.out.println("Presiona ENTER para continuar...");
+                scan.nextLine();
+                for (int i = 0; i < 2; i++){
+                    p1.setPosX(p1.getPosX()+1);
+                    p2.setPosX(p2.getPosX()+1);
+                    this.renderizar();
+                    System.out.println("Presiona ENTER para continuar...");
+                    scan.nextLine();
+                }
+            }
         }
         else if (nivel == 1){
             if (player == 1){
-                //RECORRE TERRITORIO
                 int xOrig = p1.getPosX(); int yOrig = p1.getPosY();
+                for (int i = 0; i < 2; i++){
+                    p1.setPosY(p1.getPosY() + 1);
+                    this.renderizar();
+                    System.out.println("Presiona ENTER para continuar...");
+                    scan.nextLine();
+                }
                 p1.setPosY(yOrig + 1);
                 this.renderizar();
                 System.out.println("Presiona ENTER para continuar...");
                 scan.nextLine();
-                /////
+                
                 p1.setPosY(yOrig + 2);
                 this.renderizar();
                 System.out.println("Presiona ENTER para continuar...");
                 scan.nextLine();
-                /////
+
                 p1.setPosY(yOrig + 4);
                 this.renderizar();
                 System.out.println("Presiona ENTER para continuar...");
@@ -178,7 +207,33 @@ public class Juego {
                 //NOTHING
             }
         } else if (nivel == 2){
-            //COMPLETAR EL OTRO NIVEL
+            if (player == 1){
+                for (int i = 0; i < 3; i++){
+                    p1.setPosX(p1.getPosX() + 1);
+                    this.renderizar();
+                    System.out.println("Presiona ENTER para continuar...");
+                    scan.nextLine();
+                }
+            } else if (player == 2){
+                //NOTHING
+            } else if (player == 3){
+                p1.setPosX(p1.getPosX()+1);
+                p2.setPosX(p2.getPosX()+1);
+                this.renderizar();
+                System.out.println("Presiona ENTER para continuar...");
+                scan.nextLine();
+                p1.setPosX(p1.getPosX()+3);
+                p1.setPosY(p1.getPosY()-1);
+                p2.setPosX(p2.getPosX()+3);
+                this.renderizar();
+                System.out.println("Presiona ENTER para continuar...");
+                scan.nextLine();
+                p1.setPosY(p1.getPosY()+1);
+                p2.setPosY(p2.getPosY()-1);
+                this.renderizar();
+                System.out.println("Presiona ENTER para continuar...");
+                scan.nextLine();
+            }
         }
         
     }
