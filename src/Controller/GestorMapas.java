@@ -11,7 +11,7 @@ import java.util.Scanner;
  */
 public class GestorMapas {
     private Mapa[] mapas;
-    static int numNiveles = 4;
+    static int numNiveles = 3;
     
     public GestorMapas() {
         mapas = new Mapa[numNiveles];

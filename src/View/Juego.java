@@ -1,5 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
+ * To change this license header, choo  se License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -41,7 +41,7 @@ public class Juego {
         p2 = new Personaje('B');
         nombre2 = "Player 2";
         //enemigo = new Enemigo('E');
-        nivel = 3;
+        nivel = 0;
         this.inicializarPersonajes(nivel);
         this.inicializarActividad(nivel);
     }
@@ -383,14 +383,14 @@ public class Juego {
             terreno2.setActivo(false);
             mapa.getListaTerrenoInactivo().add(terreno1);
             mapa.getListaTerrenoInactivo().add(terreno2);
-        } else if (nivel == 3){
-            Terreno terreno1 = ((Terreno) mapa.getMapaAt(4, 10).getObj());
-            Terreno terreno2 = ((Terreno) mapa.getMapaAt(9, 4).getObj());
-            terreno1.setActivo(false);
-            terreno2.setActivo(false);
-            mapa.getListaTerrenoInactivo().add(terreno1);
-            mapa.getListaTerrenoInactivo().add(terreno2);
-        }
+        } //else if (nivel == 3){
+//            Terreno terreno1 = ((Terreno) mapa.getMapaAt(4, 10).getObj());
+//            Terreno terreno2 = ((Terreno) mapa.getMapaAt(9, 4).getObj());
+//            terreno1.setActivo(false);
+//            terreno2.setActivo(false);
+//            mapa.getListaTerrenoInactivo().add(terreno1);
+//            mapa.getListaTerrenoInactivo().add(terreno2);
+//        }
     }
     public void start() throws IOException, InterruptedException{
         while(true){

@@ -46,11 +46,11 @@ public class Renderizador {
                 imprimir(obj.getElementoGrafico());
             }
             System.out.println('|');
-            if (fila != 11){
-                System.out.print('|');
-                for(int i = 0; i < 33; i++) System.out.print(" ");
-                System.out.println('|');
-            }
+//            if (fila != 11){
+//                System.out.print('|');
+//                for(int i = 0; i < 33; i++) System.out.print(" ");
+//                System.out.println('|');
+//            }
         }
         imprimirLinea();
     }
