@@ -9,6 +9,7 @@ import java.util.Scanner;
 import java.io.IOException;
 import Controller.*;
 import Model.*;
+import java.util.List;
 
 
 public class Juego {
@@ -33,8 +34,9 @@ public class Juego {
         p2 = new Personaje('B');
         nombre2 = "Player 2";
         //enemigo = new Enemigo('E');
-        nivel = 0;
+        nivel = 3;
         this.inicializarPersonajes(nivel);
+        this.inicializarActividad(nivel);
     }
     
     public boolean bienvenida() throws IOException, InterruptedException{
@@ -56,8 +58,9 @@ public class Juego {
             if (opc == 1) {
                 /*NIVEL 1*/
                 /*COMPLETAR: LEER NOMBRES*/
-                nivel = 0;
+                if (nivel >= 4) nivel = 0;
                 inicializarPersonajes(nivel);
+                inicializarActividad(nivel);
                 scan.nextLine();
                 return false;
             }
@@ -136,6 +139,12 @@ public class Juego {
                     System.out.println("Presiona ENTER para continuar...");
                     scan.nextLine();
                 }
+                //ACTIVAR TERRENOS
+                List listaDuo = gestorMapa.getMapa(nivel).getListaTerrenoInactivo();
+                for (int i = 0; i < listaDuo.size(); i++){
+                    Terreno terreno = (Terreno) listaDuo.get(i);
+                    terreno.setActivo(true);
+                }
             }
             else if(player == 2){
                 //NOTHING
@@ -163,16 +172,6 @@ public class Juego {
                     System.out.println("Presiona ENTER para continuar...");
                     scan.nextLine();
                 }
-                p1.setPosY(yOrig + 1);
-                this.renderizar();
-                System.out.println("Presiona ENTER para continuar...");
-                scan.nextLine();
-                
-                p1.setPosY(yOrig + 2);
-                this.renderizar();
-                System.out.println("Presiona ENTER para continuar...");
-                scan.nextLine();
-
                 p1.setPosY(yOrig + 4);
                 this.renderizar();
                 System.out.println("Presiona ENTER para continuar...");
@@ -187,6 +186,12 @@ public class Juego {
                 scan.nextLine();
                 //VUELVE AL ORIGINAL
                 p1.setPosX(xOrig);  p1.setPosY(yOrig);
+                //ACTIVAR TERRENOS
+                List listaDuo = gestorMapa.getMapa(nivel).getListaTerrenoInactivo();
+                for (int i = 0; i < listaDuo.size(); i++){
+                    Terreno terreno = (Terreno) listaDuo.get(i);
+                    terreno.setActivo(true);
+                }
             }
             else if(player == 2){
                 //RECORRE TERRITORIO
@@ -214,6 +219,12 @@ public class Juego {
                     System.out.println("Presiona ENTER para continuar...");
                     scan.nextLine();
                 }
+                //ACTIVAR TERRENOS
+                List listaDuo = gestorMapa.getMapa(nivel).getListaTerrenoInactivo();
+                for (int i = 0; i < listaDuo.size(); i++){
+                    Terreno terreno = (Terreno) listaDuo.get(i);
+                    terreno.setActivo(true);
+                }
             } else if (player == 2){
                 //NOTHING
             } else if (player == 3){
@@ -234,8 +245,15 @@ public class Juego {
                 System.out.println("Presiona ENTER para continuar...");
                 scan.nextLine();
             }
+        } else if (nivel == 3){//NIVEL CON ENEMIGO
+            if (player == 1){
+                //SOMETHING
+            } else if (player == 2){
+                //SOMETHING
+            } else if (player == 3){
+                //NOTHING
+            }
         }
-        
     }
     
     private void actualizarInfo()throws IOException, InterruptedException{
@@ -256,6 +274,7 @@ public class Juego {
                 System.out.print(". Presiona ENTER para continuar...");
                 scan.nextLine();
                 inicializarPersonajes(nivel);
+                inicializarActividad(nivel);
             }
         }
     }
@@ -270,9 +289,9 @@ public class Juego {
     }
     
     private boolean finJuego(){        
-        /*TOPE NIVEL: 3 (cantidad de mapas)*/
+        /*TOPE NIVEL: 4 (cantidad de mapas)*/
         /*Si ha muerto o terminó todos los niveles*/
-        return (p1.getVida() <= 0) || (nivel == 3);
+        return (p1.getVida() <= 0) || (nivel == 4);
     }
     
     private void inicializarPersonajes(int nivel){
@@ -310,9 +329,47 @@ public class Juego {
                 p1.setVida(10);
                 p2.setVida(10);
             }
+        } else if (nivel == 3){
+            p1.setPosY(5);  p1.setPosX(15);
+            p1.setAccionEspecial("WQEWW", nivel);
+            p2.setPosY(9);  p2.setPosX(15);
+            p2.setAccionEspecial("KLIUOJ", nivel);
+            p2.setAccionDuo("", nivel);
+            if (p1.getVida() <= 0 || p2.getVida() <= 0){
+                p1.setVida(10);
+                p2.setVida(10);
+            }
         }
     }
-    
+    private void inicializarActividad(int nivel){
+        Mapa mapa = gestorMapa.getMapa(nivel);
+        if (nivel == 0){
+            Terreno terreno1 = ((Terreno) mapa.getMapaAt(5, 13).getObj());
+            Terreno terreno2 = ((Terreno) mapa.getMapaAt(8, 13).getObj());
+            terreno1.setActivo(false);
+            terreno2.setActivo(false);
+            mapa.getListaTerrenoInactivo().add(terreno1);
+            mapa.getListaTerrenoInactivo().add(terreno2);
+        } else if (nivel == 1){
+            Terreno terreno1 = ((Terreno) mapa.getMapaAt(9, 4).getObj());
+            terreno1.setActivo(false);
+            mapa.getListaTerrenoInactivo().add(terreno1);
+        } else if (nivel == 2){
+            Terreno terreno1 = ((Terreno) mapa.getMapaAt(6, 8).getObj());
+            Terreno terreno2 = ((Terreno) mapa.getMapaAt(8, 8).getObj());
+            terreno1.setActivo(false);
+            terreno2.setActivo(false);
+            mapa.getListaTerrenoInactivo().add(terreno1);
+            mapa.getListaTerrenoInactivo().add(terreno2);
+        } else if (nivel == 3){
+            Terreno terreno1 = ((Terreno) mapa.getMapaAt(4, 10).getObj());
+            Terreno terreno2 = ((Terreno) mapa.getMapaAt(9, 4).getObj());
+            terreno1.setActivo(false);
+            terreno2.setActivo(false);
+            mapa.getListaTerrenoInactivo().add(terreno1);
+            mapa.getListaTerrenoInactivo().add(terreno2);
+        }
+    }
     public void start() throws IOException, InterruptedException{
         while(true){
             if (bienvenida()) break;

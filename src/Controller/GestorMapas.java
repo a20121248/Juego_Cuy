@@ -4,8 +4,6 @@ package Controller;
 import Model.*;
 import java.io.*;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -13,7 +11,7 @@ import java.util.logging.Logger;
  */
 public class GestorMapas {
     private Mapa[] mapas;
-    static int numNiveles = 3;
+    static int numNiveles = 4;
     
     public GestorMapas() {
         mapas = new Mapa[numNiveles];
@@ -44,12 +42,7 @@ public class GestorMapas {
             for (int col = 0; col < linea.length(); col++){
                 Dibujable dib = charToDibujable(aux[col]);
                 mapas[nivel].setMapaAt(fila, col, dib);
-                if (dib instanceof Terreno)
-                    if (((Terreno)dib).getTipo() == 4){
-                        mapas[nivel].getListDuo().add(dib);
-                    }
             }
-                
             fila++;
         }
     }

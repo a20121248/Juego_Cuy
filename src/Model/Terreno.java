@@ -22,12 +22,12 @@ public class Terreno extends Dibujable{
     */
     public Terreno(char elementoGrafico,int alto, int ancho,int tipo){
         super(elementoGrafico,alto, ancho);
-        this.activo = elementoGrafico != 'D';
+        this.activo = true;
         this.tipo = tipo;
     }
     public Terreno(char elementoGrafico, int tipo){
         super(elementoGrafico);
-        this.activo = elementoGrafico != 'D';
+        this.activo = true;
         this.tipo = tipo;
     }
     public void setTipo(int value){

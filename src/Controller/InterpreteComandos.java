@@ -16,24 +16,12 @@ public class InterpreteComandos {
             /*PARA P1*/
             Celda celda = mapa.getMapaAt( p1.getPosY(),p1.getPosX());
             ((Terreno) celda.getObj()).setActivo(false);
-            //ACTIVAR TERRENO DUO
-            List listaDuo = mapa.getListDuo();
-            for (int i = 0; i < listaDuo.size(); i++){
-                Terreno terreno = (Terreno) listaDuo.get(i);
-                terreno.setActivo(true);
-            }
             return true;
         } 
         else if (p2.getAccionEspecial(nivel).equals(accion)){
             /*PARA P2*/
             Celda celda = mapa.getMapaAt( p2.getPosY(),p2.getPosX());
             ((Terreno) celda.getObj()).setActivo(false);
-            //ACTIVAR TERRENO DUO
-            List listaDuo = mapa.getListDuo();
-            for (int i = 0; i < listaDuo.size(); i++){
-                Terreno terreno = (Terreno) listaDuo.get(i);
-                terreno.setActivo(true);
-            }
             return true;
         }
         else if (p2.getAccionDuo(nivel).equals(accion)) {
@@ -46,8 +34,8 @@ public class InterpreteComandos {
             return true;
         }else{
             /*Pierde Vida*/
-            p1.setVida(p1.getVida() - 1);
-            p2.setVida(p2.getVida() - 1);
+            p1.setVida(p1.getVida() - 2);
+            p2.setVida(p2.getVida() - 2);
             return false;
         }
     }
@@ -70,6 +58,11 @@ public class InterpreteComandos {
             difX = 1;   personaje = 1;
         }
         if (personaje == 1){
+            Celda celda1 = gm.getMapa(nivel).getMapaAt(p1.getPosY(), p1.getPosX());
+            Terreno ter = (Terreno) celda1.getObj();
+            if (ter.getActivo() && ter.getTipo()==5){
+                return;
+            }
             int xFinal = p1.getPosX() + difX;
             int yFinal = p1.getPosY() + difY;
             if (xFinal >= 0 && xFinal < 16 && yFinal >= 0 && yFinal < 12){
@@ -83,7 +76,6 @@ public class InterpreteComandos {
                     return;
                 }
                 //Cuando se encuntra sobre objeto ayuda
-                Celda celda1 = gm.getMapa(nivel).getMapaAt(p1.getPosY(), p1.getPosX());
                 if (celda != null && celda1 != null && 
                         celda.getObj() instanceof Objeto &&
                         celda1.getObj() instanceof Objeto){
@@ -106,6 +98,11 @@ public class InterpreteComandos {
             difX = 1;   personaje = 2;
         }
         if (personaje == 2){
+            Celda celda2 = gm.getMapa(nivel).getMapaAt(p2.getPosY(), p2.getPosX());
+            Terreno ter = (Terreno) celda2.getObj();
+            if (ter.getActivo() && ter.getTipo()==5){
+                return;
+            }
             int xFinal = p2.getPosX() + difX;
             int yFinal = p2.getPosY() + difY;
             if (xFinal >= 0 && xFinal < 16 && yFinal >= 0 && yFinal < 12){
@@ -119,7 +116,6 @@ public class InterpreteComandos {
                     return;
                 }
                 //Cuando se encuntra sobre objeto ayuda
-                Celda celda2 = gm.getMapa(nivel).getMapaAt(p2.getPosY(), p2.getPosX());
                 if (celda != null && celda2 != null && 
                         celda.getObj() instanceof Objeto &&
                         celda2.getObj() instanceof Objeto){

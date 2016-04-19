@@ -13,10 +13,7 @@ public class Main {
      */
     public static void main(String[] args) throws IOException, InterruptedException {
         Juego j = new Juego();
-
         j.start();
-        System.out.println("Pa ke kieres saber eso haha salu2");
-        System.out.println("no osy zientifiko");
     }
     
 }
