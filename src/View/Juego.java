@@ -32,7 +32,7 @@ public class Juego {
         gestorMapa = new GestorMapas();
         scan = new Scanner(System.in);
         p1 = p2 = null;
-        nivel = 0;
+        nivel = 3;
         inicio_Nivel = true;
         this.inicializarPersonajes(nivel);
         this.inicializarActividad(nivel);
@@ -306,7 +306,26 @@ public class Juego {
             if (player == 1) {
                 //NADA
             } else if (player == 2) {
-                //ANIMARLO
+                //ANIMACION
+                int xOrig = p2.getPosX();
+                int yOrig = p2.getPosY();
+                //1
+                p2.setPosY(yOrig - 1);
+                p2.setPosX(xOrig - 1);
+                this.renderizar();
+                System.out.println("Presiona ENTER para continuar...");
+                scan.nextLine();
+                //2
+                p2.setPosY(yOrig - 3);
+                this.renderizar();
+                System.out.println("Presiona ENTER para continuar...");
+                scan.nextLine();
+                //3
+                p2.setPosY(yOrig - 4);
+                this.renderizar();
+                System.out.println("Presiona ENTER para continuar...");
+                scan.nextLine();
+                //DESTRUYE ENEMIGO Y TRIGGERS
                 Terreno t = new Terreno('S', 1);
                 Mapa m = gestorMapa.getMapa(nivel);
                 m.setMapaAt(4, 9, t);
@@ -314,9 +333,12 @@ public class Juego {
                 m.setMapaAt(4, 10, t);
                 m.setMapaAt(5, 10, t);
                 m.setMapaAt(6, 10, t);
+                //4
+                p2.setPosX(xOrig);
+                p2.setPosY(yOrig);
+                this.renderizar();
                 System.out.println("Presiona ENTER para continuar...");
                 scan.nextLine();
-                //DESACTIVA TRIGGER 1
             } else if (player == 3) {
                 //NOTHING
             }
