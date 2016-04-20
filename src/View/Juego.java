@@ -334,6 +334,7 @@ public class Juego {
 
         Celda celda1 = gestorMapa.getMapa(nivel).getMapaAt(posY1, posX1);
         Celda celda2 = gestorMapa.getMapa(nivel).getMapaAt(posY2, posX2);
+        /*VERIFICA LLEGARON A LA META*/
         if (celda1.getObj() instanceof Terreno && celda2.getObj() instanceof Terreno) {
             if (((Terreno) celda1.getObj()).getTipo() == 6
                     && ((Terreno) celda2.getObj()).getTipo() == 6) {
@@ -347,6 +348,8 @@ public class Juego {
                 inicializarActividad(nivel);
             }
         }
+        
+        /*VERIFICA SI EL PERSONAJE CAYÓ EN UN TRIGGER ENEMIGO*/
         if (celda1.getObj() instanceof Terreno || celda2.getObj() instanceof Terreno) {
             Terreno ter = (Terreno) celda1.getObj();
             if (ter.getActivo() && ter.getTipo() == 5) {
@@ -362,7 +365,6 @@ public class Juego {
                     t.setActivo(true);
                 }
             }
-
         }
 
     }
@@ -435,6 +437,8 @@ public class Juego {
 
     private void inicializarActividad(int nivel) {
         Mapa mapa = gestorMapa.getMapa(nivel);
+        /*PARCHE 1*/
+        this.parcheActividadInicial(nivel);
         if (nivel == 0) {
             cargar_Actividad_XML(0);
         } else if (nivel == 1) {
@@ -566,4 +570,14 @@ public class Juego {
         new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
     }
     
+    private void parcheActividadInicial(int nivel){
+        Mapa mapa = gestorMapa.getMapa(nivel);
+        for (int i = 0; i < 12; i++)
+            for(int j = 0; j < 16; j++){
+                Celda celda = mapa.getMapaAt(i, j);
+                Dibujable dib = celda.getObj();
+                if (dib instanceof Terreno)
+                    ((Terreno) dib).setActivo(true);
+            }
+    }
 }
