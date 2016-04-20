@@ -72,12 +72,13 @@ public class GestorMapas {
             e.setTipo(2);
             dib = e;
         }
+        else if (c == 'o')
+            dib = new Objeto(c,2);
         else if (c == 'g' || c == 'h' || c == 't' || c == 'm' 
                 || c == 'L' || c == 'p' || c == 'i' || c == 'd'
                 || c == 'j' || c == 'a')
             dib = new Objeto(c,1);
-        else if (c == 'o')
-            dib = new Objeto(c,2);
+        
         return dib;
     }
     

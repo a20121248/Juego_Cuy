@@ -32,11 +32,12 @@ public class Juego {
         gestorMapa = new GestorMapas();
         scan = new Scanner(System.in);
         p1 = p2 = null;
-        nivel = 3;
+        nivel = 1;
         inicio_Nivel = true;
         this.inicializarPersonajes(nivel);
         this.inicializarActividad(nivel);
-        
+        //ANHADIDO CARGAR OBJETO AYUDA
+        this.cargar_Objetos_XML(1);
         txt_Historia = new String[4];
         txt_Historia[0] = "- Kiru y Milo conversan.\nLe nace la pregunta a Kiru y deciden viajar.";
         txt_Historia[1] = "- Kiru y Milo viajan a Paracas en un auto.\nLlegan a la playa y empiezan a jugar.";
@@ -388,7 +389,6 @@ public class Juego {
                 }
             }
         }
-
     }
 
     private void renderizar() throws IOException, InterruptedException {
@@ -513,9 +513,36 @@ public class Juego {
             }
             
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }    
+    private void cargar_Objetos_XML(int nivel){
+        Mapa mapa = gestorMapa.getMapa(nivel);
+        try {
+            File inputFile = new File("objetos.xml");
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(inputFile);
+            doc.getDocumentElement().normalize();
+            NodeList nList = doc.getElementsByTagName("ObjetoAyuda");
+            
+            for (int i = 0; i < nList.getLength(); i++){
+                Node nNode = nList.item(i);
+                Element eElement = (Element) nNode;
+                String elmGrf = eElement.getElementsByTagName("elementoGrafico").item(0).getTextContent();
+                char elementoGrafico = elmGrf.charAt(0);
+                int fila = Integer.parseInt(eElement.getElementsByTagName("fila").item(0).getTextContent());
+                int columna = Integer.parseInt(eElement.getElementsByTagName("columna").item(0).getTextContent());
+                Dibujable dib = mapa.getMapaAt(fila, columna).getObj();
+                if (dib instanceof Objeto){
+                    Objeto obj = (Objeto) dib;
+                    obj.setElementoGrafico(elementoGrafico);
+                }
+            }
+        } catch (Exception e) {
+            //e.printStackTrace();
+        }
+    }
     
     private void bienvenida() throws IOException, InterruptedException {
         cleanWindow();
@@ -594,6 +621,7 @@ public class Juego {
     
     private void parcheActividadInicial(int nivel){
         Mapa mapa = gestorMapa.getMapa(nivel);
+        if (mapa == null) return;
         for (int i = 0; i < 12; i++)
             for(int j = 0; j < 16; j++){
                 Celda celda = mapa.getMapaAt(i, j);

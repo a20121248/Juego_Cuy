@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Objetos>
+    <Nivel>
+		<ObjetoAyuda>
+			<tipo>1</tipo>
+			<elementoGrafico>x</elementoGrafico>
+			<fila>3</fila>
+			<columna>4</columna>
+		</ObjetoAyuda>
+		<ObjetoAyuda>
+			<tipo>1</tipo>
+			<elementoGrafico>x</elementoGrafico>
+			<fila>3</fila>
+			<columna>5</columna>
+		</ObjetoAyuda>
+		<ObjetoAyuda>
+			<tipo>1</tipo>
+			<elementoGrafico>x</elementoGrafico>
+			<fila>4</fila>
+			<columna>4</columna>
+		</ObjetoAyuda>
+		<ObjetoAyuda>
+			<tipo>1</tipo>
+			<elementoGrafico>x</elementoGrafico>
+			<fila>4</fila>
+			<columna>5</columna>
+		</ObjetoAyuda>
+	</Nivel>
+</Objetos>
