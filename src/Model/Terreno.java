@@ -16,9 +16,9 @@ public class Terreno extends Dibujable{
      *2-> terreno p2 (B)
      *3-> terreno accion simple
      *4-> terreno accion duo
-     *5-> terreno trigger
-     *6-> terreno final Usado´como meta 
-     *7-> background
+     *5-> terreno trigger de A
+     *6-> terreno final usado como meta 
+     *7-> terreno trigger de B
     */
     public Terreno(char elementoGrafico,int alto, int ancho,int tipo){
         super(elementoGrafico,alto, ancho);

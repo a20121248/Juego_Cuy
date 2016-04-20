@@ -11,7 +11,7 @@ import java.util.Scanner;
  */
 public class GestorMapas {
     private Mapa[] mapas;
-    static int numNiveles = 3;
+    static int numNiveles = 4;
     
     public GestorMapas() {
         mapas = new Mapa[numNiveles];
@@ -41,6 +41,10 @@ public class GestorMapas {
             char[] aux = linea.toCharArray();
             for (int col = 0; col < linea.length(); col++){
                 Dibujable dib = charToDibujable(aux[col]);
+                if (dib instanceof Enemigo) {
+                    ((Enemigo)dib).setPosX(col);
+                    ((Enemigo)dib).setPosY(fila);
+                }
                 mapas[nivel].setMapaAt(fila, col, dib);
             }
             fila++;
@@ -57,10 +61,22 @@ public class GestorMapas {
             dib = new Terreno(c,3);
         else if (c == 'D') //Accion duo
             dib = new Terreno(c,4);
-        else if (c == 'T') //Trigger enemigo
-            dib = new Terreno(c,5);
+        else if (c == 'T') //Trigger enemigo de A
+            dib = new Terreno('S',5);
         else if (c == 'F') //Terreno final
             dib = new Terreno(c,6);
+        else if (c == 'Y') //Trigger enemigo de B
+            dib = new Terreno('N',7);
+        else if (c == 'E') {
+            Enemigo e = new Enemigo('S');
+            e.setTipo(1);
+            dib = e;
+        }
+        else if (c == 'R') {
+            Enemigo e = new Enemigo('N');
+            e.setTipo(2);
+            dib = e;
+        }
         else if (c == 'g' || c == 'h' || c == 't' || c == 'm' 
                 || c == 'L' || c == 'p' || c == 'i' || c == 'd'
                 || c == 'j' || c == 'a')
@@ -78,5 +94,15 @@ public class GestorMapas {
     }
     public int getNumNiveles(){
         return this.numNiveles;
+    }
+    
+    public Enemigo getEnemigo(int nivel) {
+        for (int i = 0; i < 12; i++)
+            for (int j = 0; j < 16; j++) {
+                Dibujable obj = mapas[nivel].getMapaAt(i,j).getObj();
+                if (obj instanceof Enemigo)
+                    return (Enemigo)obj;
+            }                
+        return null;
     }
 }

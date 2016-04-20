@@ -25,7 +25,6 @@ public class Juego {
     private GestorMapas gestorMapa;
     private Personaje p1;
     private Personaje p2;
-    //private Enemigo enemigo;
     private final Scanner scan;
     private int nivel;
     
@@ -35,8 +34,7 @@ public class Juego {
         gestorMapa = new GestorMapas();
         scan = new Scanner(System.in);
         p1 = p2 = null;
-        //enemigo = new Enemigo('E');
-        nivel = 0;
+        nivel = 3;
         this.inicializarPersonajes(nivel);
         this.inicializarActividad(nivel);
     }
@@ -161,7 +159,7 @@ public class Juego {
         //Verificar el tipo de comando
         
         if (accion.equalsIgnoreCase("SAVE")) { //GUARDAR PARTIDA
-            lector.guardarPartida();
+            //guardarPartida();
             System.out.println("Partida guardada correctamente!");
             System.out.println("(presione ENTER para continuar)");
             scan.nextLine();
@@ -299,12 +297,18 @@ public class Juego {
             }
         } else if (nivel == 3){//NIVEL CON ENEMIGO
             if (player == 1){
-                //ANIMARLO
-                //MATA ENEMIGO 2
-                //DESACTIVA TRIGGER 2
+                //NADA
             } else if (player == 2){
                 //ANIMARLO
-                //MATA ENEMIGO 1
+                Terreno t = new Terreno('S', 1);
+                Mapa m = gestorMapa.getMapa(nivel);
+                m.setMapaAt(4, 9, t);
+                m.setMapaAt(3, 10, t);
+                m.setMapaAt(4, 10, t);
+                m.setMapaAt(5, 10, t);
+                m.setMapaAt(6, 10, t);
+                System.out.println("Presiona ENTER para continuar...");
+                scan.nextLine();
                 //DESACTIVA TRIGGER 1
             } else if (player == 3){
                 //NOTHING
@@ -334,10 +338,21 @@ public class Juego {
             }
         }
         if (celda1.getObj() instanceof Terreno || celda2.getObj() instanceof Terreno){
-            if (true){
+            Terreno ter = (Terreno) celda1.getObj();
+            if (ter.getActivo() && ter.getTipo() == 5){
                 //ACTIVE LA VISIBILIDAD DEL ENEMIGO Y QUE LO MUESTRE
+                Enemigo e = this.gestorMapa.getEnemigo(nivel);
+                e.setElementoGrafico('E');
                 //DISMINUIR LA VIDA DEL JUGADOR 1
+                this.p1.setVida(this.p1.getVida() - 1);
+                //Activar el terreno de accion
+                List l = this.gestorMapa.getMapa(nivel).getListaTerrenoInactivo();
+                for (int i = 0; i < l.size(); i++) {
+                    Terreno t = (Terreno)(l.get(i));
+                    t.setActivo(true);
+                }
             }
+            
         }
     
     }
@@ -427,14 +442,11 @@ public class Juego {
             terreno2.setActivo(false);
             mapa.getListaTerrenoInactivo().add(terreno1);
             mapa.getListaTerrenoInactivo().add(terreno2);
-        } //else if (nivel == 3){
-//            Terreno terreno1 = ((Terreno) mapa.getMapaAt(4, 10).getObj());
-//            Terreno terreno2 = ((Terreno) mapa.getMapaAt(9, 4).getObj());
-//            terreno1.setActivo(false);
-//            terreno2.setActivo(false);
-//            mapa.getListaTerrenoInactivo().add(terreno1);
-//            mapa.getListaTerrenoInactivo().add(terreno2);
-//        }
+        } else if (nivel == 3){
+            Terreno terreno1 = ((Terreno) mapa.getMapaAt(9, 10).getObj());
+            terreno1.setActivo(false);
+            mapa.getListaTerrenoInactivo().add(terreno1);
+        }
     }
     public void start() throws IOException, InterruptedException{
         while(true){

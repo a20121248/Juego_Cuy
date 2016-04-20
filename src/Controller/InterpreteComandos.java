@@ -72,7 +72,7 @@ public class InterpreteComandos {
                 if (celda != null && celda.getObj() instanceof Terreno){
                     Terreno terreno = (Terreno)celda.getObj();
                     int t = terreno.getTipo();
-                    if (t != 2 && t != 7 && t > 0 && t < 8){
+                    if (t != 2 && t > 0 && t < 8){
                         p1.Mover(xFinal, yFinal);
                     }
                     return;
@@ -115,7 +115,7 @@ public class InterpreteComandos {
                 if (celda != null && celda.getObj() instanceof Terreno){
                     Terreno terreno = (Terreno)celda.getObj();
                     int t = terreno.getTipo();
-                    if (t != 1 && t != 7 && t > 0 && t < 8){
+                    if (t != 1 && t > 0 && t < 8){
                         p2.Mover(xFinal, yFinal);
                     }
                     return;
@@ -132,9 +132,5 @@ public class InterpreteComandos {
                 }
             }
         }
-    }
-    
-    public void guardarPartida() {
-        
     }
 }
