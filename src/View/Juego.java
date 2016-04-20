@@ -76,7 +76,7 @@ public class Juego {
             do {
                 if (inicio_Nivel) {
                     inicio_Nivel = false;
-//                    cleanWindow();
+                    cleanWindow();
                     System.out.println(txt_Historia[nivel]);
                     System.out.print("\nPresiona ENTER para continuar...");
                     scan.nextLine();                    
