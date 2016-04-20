@@ -22,6 +22,9 @@ public class Juego {
     private Personaje p2;
     private final Scanner scan;
     private int nivel;
+    private boolean inicio_Nivel;
+    final String[] txt_Historia;
+    final String[] txt_Dialogo;
 
     public Juego() {
         rend = new Renderizador();
@@ -30,82 +33,64 @@ public class Juego {
         scan = new Scanner(System.in);
         p1 = p2 = null;
         nivel = 0;
+        inicio_Nivel = true;
         this.inicializarPersonajes(nivel);
         this.inicializarActividad(nivel);
+        
+        txt_Historia = new String[4];
+        txt_Historia[0] = "- Kiru y Milo conversan.\nLe nace la pregunta a Kiru y deciden viajar.";
+        txt_Historia[1] = "- Kiru y Milo viajan a Paracas en un auto.\nLlegan a la playa y empiezan a jugar.";
+        txt_Historia[2] = "- Kiru y Milo se encuentran con Peli el Pelicano.\nPeli el pelicano no sabe de donde viene Kiru. Kiru y Milo deciden viajar a la sierra.";
+        txt_Historia[3] = "- Kiru y Milo conversan con Dana la Llama.\nDana responde la pregunta de Kiru. Kiru se contenta y decide, con Milo, viajar por todos los Andes.";
+        
+        txt_Dialogo = new String [2];      
+        txt_Dialogo[0] = "------------------------------------------------------------------------------\n"
+                       + "                                INSTRUCCIONES\n"
+                       + "------------------------------------------------------------------------------\n"
+                       + "- Usa WASD para mover a Kiru y JKLI para mover a Milo.\n"
+                       + "- Si ves un lugar para la accion o el duo... Parate sobre el!!\n"
+                       + "  Podras realizar acciones especiales.\n"
+                       + "- Solo podras pasar los niveles con la ayuda de las acciones especiales. Para\n"
+                       + "  esto, tendras que presionar comandos que se mostraran en un cuadro de\n"
+                       + "  dialogo como este.\n"
+                       + "- Los comandos deben ser ejecutados en la secuencia correcta, sino\n"
+                       + "  perderas puntos de vida.\n"
+                       + "- Puedes ver los puntos de vida en la parte superior de la pantalla.\n"
+                       + "- Para activar los terrenos con acciones especiales duo, tienen que estar sobre\n"
+                       + "  ellos Kiru y Milo al mismo tiempo, en los de acciones especiales solo con uno\n"
+                       + "  basta.\n";
+        txt_Dialogo[1] = "- En tu aventura, a veces te toparas con animales malos.\n"
+                       + "- Estos enemigos te bajaran puntos de vida. Si tus puntos de vida llegan a 0, se acabara el juego.\n"
+                       + "- Si un enemigo afecta a un personaje, este no se podra mover. Tendras que usar a su amigo para ayudarlo.\n";        
     }
 
-    public boolean bienvenida() throws IOException, InterruptedException {
-        cleanWindow();
-        System.out.println("\n\n");
-        System.out.println("        __   __             _              _                    _       ");
-        System.out.println("        \\ \\ / /            | |            | |                  | |      ");
-        System.out.println("         \\ V /           __| |  ___     __| |  ___   _ __    __| |  ___ ");
-        System.out.println("          \\ /           / _` | / _ \\   / _` | / _ \\ | '_ \\  / _` | / _ \\");
-        System.out.println("          | | _  _  _  | (_| ||  __/  | (_| || (_) || | | || (_| ||  __/");
-        System.out.println("          \\_/(_)(_)(_)  \\__,_| \\___|   \\__,_| \\___/ |_| |_| \\__,_| \\___|");
-        System.out.println("\n");
-        System.out.println("                                                         ___  ");
-        System.out.println("                                                        |__ \\ ");
-        System.out.println("                       ___   ___   _   _    _   _   ___    ) |");
-        System.out.println("                      / __| / _ \\ | | | |  | | | | / _ \\  / / ");
-        System.out.println("                      \\__ \\| (_) || |_| |  | |_| || (_) ||_|  ");
-        System.out.println("                      |___/ \\___/  \\__, |   \\__, | \\___/ (_)  ");
-        System.out.println("                                    __/ |    __/ |            ");
-        System.out.println("                                   |___/    |___/             ");
-        scan.nextLine();
-
-        cleanWindow();
-        System.out.println("Bievenido al juego");
-        System.out.println("(Presiona ENTER para continuar...)");
-        Scanner sc = new Scanner(System.in);
-        sc.nextLine();
-        cleanWindow();
-        do {
-            System.out.println("1. Empezar el juego");
-            System.out.println("2. Salir");
-            //Leer opción
-            int opc = 0;
-            String aux = scan.nextLine();
-            try {
-                opc = Integer.parseInt(aux);
-            } catch (NumberFormatException ex) {
-                System.out.println("Error: Ingrese una opcion valida.");
-                System.out.println();
-                continue;
-            }
-            if (opc == 1) {
-                /* Leer nombres de jugadores */
-                cleanWindow();
-
-                //Si ya se jugó una partida anterior ya no se piden los nombres
-                if (this.p1.getNombre() == null || this.p2.getNombre() == null) {
-                    System.out.println("Ingrese el nombre del primer jugador:");
-                    this.p1.setNombre(scan.nextLine());
-                    System.out.println("Ingrese el nombre del segundo jugador:");
-                    this.p2.setNombre(scan.nextLine());
+    public void start() throws IOException, InterruptedException {
+        bienvenida();
+        while (true) {
+            if (menu())
+                break;
+            cleanWindow();
+            System.out.println(txt_Dialogo[0]);
+            System.out.print("\nPresiona ENTER para continuar...");
+            scan.nextLine();
+            do {
+                if (inicio_Nivel) {
+                    inicio_Nivel = false;
+//                    cleanWindow();
+                    System.out.println(txt_Historia[nivel]);
+                    System.out.print("\nPresiona ENTER para continuar...");
+                    scan.nextLine();                    
                 }
-
-                cleanWindow();
-
-                if (nivel >= gestorMapa.getNumNiveles()) {
-                    nivel = 0;
-                    p1.setVida(10);
-                }
-                inicializarPersonajes(nivel);
-                inicializarActividad(nivel);
-                return false;
-            } else if (opc == 2) {
-                confirmarFinJuego();
-            } else if (opc == 3) {
-                //CARGAR ARCHIVO GUARDADO
-                //inicializarPersonajes(nivel);
-                //inicializarActividad(nivel);
-                //return false;
-            }
-        } while (true);
-
-    }
-
+                renderizar();
+                capturarAccion();
+                actualizarInfo();
+            } while (!finJuego());
+            System.out.println("\n G A M E   O V E R !");
+            System.out.print("Presione ENTER para volver al menu de bienvenida.");
+            scan.nextLine();
+        }
+    }    
+    
     private void confirmarFinJuego() {
         System.out.println("Desea salir? (1. Si, 2. No)");
         int salir = 0;
@@ -339,7 +324,7 @@ public class Juego {
     }
 
     private void actualizarInfo() throws IOException, InterruptedException {
-        /*Llegó al final de la menta, pasa de nivel*/
+        /*Llego al final de la menta, pasa de nivel*/
         /*VERIFICA P1 y P2 EN META*/
 
         int posX1 = p1.getPosX();
@@ -354,6 +339,7 @@ public class Juego {
                     && ((Terreno) celda2.getObj()).getTipo() == 6) {
                 renderizar();
                 nivel += 1;
+                inicio_Nivel = true;
                 System.out.print("Acabaste el nivel " + (nivel - 1));
                 System.out.print(". Presiona ENTER para continuar...");
                 scan.nextLine();
@@ -396,7 +382,7 @@ public class Juego {
         /*Si ha muerto o terminó todos los niveles*/
         return (p1.getVida() <= 0) || (nivel == gestorMapa.getNumNiveles());
     }
-
+    
     private void inicializarPersonajes(int nivel) {
         /*AQUI SE PUEDE REALIZAR LECTURA DE PERSONAJE Y ENEMIGO*/
         /*SUS DATOS, ETC*/
@@ -491,37 +477,93 @@ public class Juego {
             int columna2 = Integer.parseInt(eElement.getElementsByTagName("columna2").item(0).getTextContent());
             
             Terreno terreno1 = ((Terreno) mapa.getMapaAt(fila1, columna1).getObj());
-            Terreno terreno2 = ((Terreno) mapa.getMapaAt(fila2, columna2).getObj());
             terreno1.setActivo(false);
-            terreno2.setActivo(false);
+            mapa.getListaTerrenoInactivo().add(terreno1);
             
-            mapa.getListaTerrenoInactivo().add(terreno1);            
-            if (nivel == 0 || nivel == 2)
+            if (nivel == 0 || nivel == 2) {
+                Terreno terreno2 = ((Terreno) mapa.getMapaAt(fila2, columna2).getObj());
+                terreno2.setActivo(false);                
                 mapa.getListaTerrenoInactivo().add(terreno2);
+            }
             
         } catch (Exception e) {
             e.printStackTrace();
         }
     }    
     
-    public void start() throws IOException, InterruptedException {
-        while (true) {
-            if (bienvenida()) {
-                break;
-            }
-            do {
-                renderizar();
-                capturarAccion();
-                actualizarInfo();
-            } while (!finJuego());
-            System.out.println("\n G A M E   O V E R !");
-            System.out.print("Presione ENTER para volver al menu de bienvenida.");
-            scan.nextLine();
-        }
+    private void bienvenida() throws IOException, InterruptedException {
+        cleanWindow();
+        System.out.println("\n\n");
+        System.out.println("        __   __             _              _                    _       ");
+        System.out.println("        \\ \\ / /            | |            | |                  | |      ");
+        System.out.println("         \\ V /           __| |  ___     __| |  ___   _ __    __| |  ___ ");
+        System.out.println("          \\ /           / _` | / _ \\   / _` | / _ \\ | '_ \\  / _` | / _ \\");
+        System.out.println("          | | _  _  _  | (_| ||  __/  | (_| || (_) || | | || (_| ||  __/");
+        System.out.println("          \\_/(_)(_)(_)  \\__,_| \\___|   \\__,_| \\___/ |_| |_| \\__,_| \\___|");
+        System.out.println("\n");
+        System.out.println("                                                         ___  ");
+        System.out.println("                                                        |__ \\ ");
+        System.out.println("                       ___   ___   _   _    _   _   ___    ) |");
+        System.out.println("                      / __| / _ \\ | | | |  | | | | / _ \\  / / ");
+        System.out.println("                      \\__ \\| (_) || |_| |  | |_| || (_) ||_|  ");
+        System.out.println("                      |___/ \\___/  \\__, |   \\__, | \\___/ (_)  ");
+        System.out.println("                                    __/ |    __/ |            ");
+        System.out.println("                                   |___/    |___/             ");
+        System.out.print("\nPresiona ENTER para continuar...");
+        scan.nextLine();
     }
+    
+    private boolean menu() throws IOException, InterruptedException {
+        cleanWindow();
+        do {
+            System.out.println("1. Empezar el juego");
+            System.out.println("2. Salir");
+            //Leer opción
+            int opc = 0;
+            String aux = scan.nextLine();
+            try {
+                opc = Integer.parseInt(aux);
+            } catch (NumberFormatException ex) {
+                System.out.println("Error: Ingrese una opcion valida.");
+                System.out.println();
+                continue;
+            }
+            if (opc == 1) {
+                /* Leer nombres de jugadores */
+                cleanWindow();
 
+                //Si ya se jugó una partida anterior ya no se piden los nombres
+                if (this.p1.getNombre() == null || this.p2.getNombre() == null) {
+                    System.out.println("Ingrese el nombre del primer jugador:");
+                    this.p1.setNombre(scan.nextLine());
+                    System.out.println("Ingrese el nombre del segundo jugador:");
+                    this.p2.setNombre(scan.nextLine());
+                }
+
+                cleanWindow();
+
+                if (nivel >= gestorMapa.getNumNiveles()) {
+                    nivel = 0;
+                    p1.setVida(10);
+                }
+                inicializarPersonajes(nivel);
+                inicializarActividad(nivel);
+                return false;
+            } else if (opc == 2) {
+                confirmarFinJuego();
+            } else if (opc == 3) {
+                //CARGAR ARCHIVO GUARDADO
+                //inicializarPersonajes(nivel);
+                //inicializarActividad(nivel);
+                //return false;
+            }
+        } while (true);
+
+    }    
+    
     private void cleanWindow() throws IOException, InterruptedException {
         //Limpia la ventana (solo funciona en consola)
         new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
     }
+    
 }

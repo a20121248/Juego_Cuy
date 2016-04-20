@@ -1,14 +1,9 @@
 package Controller;
 
-
 import Model.*;
 import java.io.*;
 import java.util.Scanner;
 
-/**
- *
- * @author Godievski
- */
 public class GestorMapas {
     private Mapa[] mapas;
     static int numNiveles = 4;
