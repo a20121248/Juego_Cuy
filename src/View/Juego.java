@@ -408,6 +408,7 @@ public class Juego {
     private void inicializarPersonajes(int nivel) {
         /*AQUI SE PUEDE REALIZAR LECTURA DE PERSONAJE Y ENEMIGO*/
         /*SUS DATOS, ETC*/
+        if (nivel < 0 || nivel >= gestorMapa.getNumNiveles()) return;
         if (p1 == null) 
             p1 = new Personaje('A');
         if (p2 == null) 
@@ -415,14 +416,7 @@ public class Juego {
         
         if (p1.getVida() <= 0)
             p1.setVida(10);
-        if (nivel == 0)
-            Cargar_Niveles_XML(0);
-        else if (nivel == 1)
-            Cargar_Niveles_XML(1);
-        else if (nivel == 2)
-            Cargar_Niveles_XML(2);
-        else if (nivel == 3)
-            Cargar_Niveles_XML(3);
+        Cargar_Niveles_XML(nivel);
     }
 
     private void Cargar_Niveles_XML(int nivel) {
@@ -456,7 +450,7 @@ public class Juego {
         Mapa mapa = gestorMapa.getMapa(nivel);
         /*PARCHE 1*/
         this.parcheActividadInicial(nivel);
-        this.cargar_Actividad_XML(nivel);        
+        this.cargar_Actividad_XML(nivel);
     }
 
     private void cargar_Actividad_XML(int nivel) {
@@ -485,6 +479,7 @@ public class Juego {
             //e.printStackTrace();
         }
     }    
+    
     private void cargar_Objetos_XML(int nivel){
         Mapa mapa = gestorMapa.getMapa(nivel);
         try {
