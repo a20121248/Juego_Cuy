@@ -40,7 +40,7 @@ public class InterpreteComandos {
     }
     
     public void interpretaMovimiento(String accion, Personaje p1, Personaje p2,
-            GestorMapas gm, int nivel){
+            Mapa mapa, int nivel){
         int difX = 0;
         int difY = 0;
         int personaje = 0;
@@ -57,7 +57,7 @@ public class InterpreteComandos {
             difX = 1;   personaje = 1;
         }
         if (personaje == 1){
-            Celda celda1 = gm.getMapa(nivel).getMapaAt(p1.getPosY(), p1.getPosX());
+            Celda celda1 = mapa.getMapaAt(p1.getPosY(), p1.getPosX());
             //PARA QUE NO SE MUEVA CUANDO ESTA EN UN TRIGGER ACTIVO
             if (celda1.getObj() instanceof Terreno){
                 Terreno ter = (Terreno) celda1.getObj();
@@ -65,10 +65,11 @@ public class InterpreteComandos {
                 return;
                 }
             }
+            //MOVER AL PERSONAJE
             int xFinal = p1.getPosX() + difX;
             int yFinal = p1.getPosY() + difY;
             if (xFinal >= 0 && xFinal < 16 && yFinal >= 0 && yFinal < 12){
-                Celda celda = gm.getMapa(nivel).getMapaAt(yFinal, xFinal);
+                Celda celda = mapa.getMapaAt(yFinal, xFinal);
                 if (celda != null && celda.getObj() instanceof Terreno){
                     Terreno terreno = (Terreno)celda.getObj();
                     int t = terreno.getTipo();
@@ -77,7 +78,7 @@ public class InterpreteComandos {
                     }
                     return;
                 }
-                //Cuando se encuntra sobre objeto ayuda
+                //PARCHE: Cuando se encuntra sobre objeto ayuda
                 if (celda != null && celda1 != null && 
                         celda.getObj() instanceof Objeto &&
                         celda1.getObj() instanceof Objeto){
@@ -90,6 +91,7 @@ public class InterpreteComandos {
             }
             return;
         }
+        
         if (c == 'I'){
             difY = -1; personaje = 2;
         } else if (c == 'J'){
@@ -100,7 +102,7 @@ public class InterpreteComandos {
             difX = 1;   personaje = 2;
         }
         if (personaje == 2){
-            Celda celda2 = gm.getMapa(nivel).getMapaAt(p2.getPosY(), p2.getPosX());
+            Celda celda2 = mapa.getMapaAt(p2.getPosY(), p2.getPosX());
             //PARA QUE NO SE MUEVA CUANDO ESTA EN UN TRIGGER ACTIVO
             if (celda2.getObj() instanceof Terreno){
                 Terreno ter = (Terreno) celda2.getObj();
@@ -108,10 +110,11 @@ public class InterpreteComandos {
                     return;
                 }
             }
+            //MOVER AL PERSONAJE
             int xFinal = p2.getPosX() + difX;
             int yFinal = p2.getPosY() + difY;
             if (xFinal >= 0 && xFinal < 16 && yFinal >= 0 && yFinal < 12){
-                Celda celda = gm.getMapa(nivel).getMapaAt(yFinal, xFinal);
+                Celda celda = mapa.getMapaAt(yFinal, xFinal);
                 if (celda != null && celda.getObj() instanceof Terreno){
                     Terreno terreno = (Terreno)celda.getObj();
                     int t = terreno.getTipo();
@@ -120,7 +123,7 @@ public class InterpreteComandos {
                     }
                     return;
                 }
-                //Cuando se encuntra sobre objeto ayuda
+                //PARCHE: Cuando se encuntra sobre objeto ayuda
                 if (celda != null && celda2 != null && 
                         celda.getObj() instanceof Objeto &&
                         celda2.getObj() instanceof Objeto){

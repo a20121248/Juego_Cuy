@@ -32,7 +32,7 @@ public class Juego {
         gestorMapa = new GestorMapas();
         scan = new Scanner(System.in);
         p1 = p2 = null;
-        nivel = 1;
+        nivel = 0;
         inicio_Nivel = true;
         this.inicializarPersonajes(nivel);
         this.inicializarActividad(nivel);
@@ -124,20 +124,19 @@ public class Juego {
                 System.out.print("Escriba la accion (" + p1.getAccionEspecial(nivel) + "): ");
                 accion = scan.nextLine();
                 /*EJECUTA ACCION ESPECIAL SEGUN NIVEL*/
-                boolean exito = lector.interpretaAccionEspecial(accion, gestorMapa.getMapa(nivel), p1, p2, nivel);
+                boolean exito = lector.interpretaAccionEspecial(accion, m, p1, p2, nivel);
                 if (exito) {
                     ejecutarAccionEspecial(1);
                 }
                 return;
             }
         }
-
         if (obj2 instanceof Terreno) {
             if (((Terreno) obj2).getTipo() == 3 && ((Terreno) obj2).getActivo()) {
                 System.out.print("Escriba la accion (" + p2.getAccionEspecial(nivel) + "): ");
                 accion = scan.nextLine();
                 /*EJECUTA ACCION ESPECIAL SEGUN NIVEL*/
-                boolean exito = lector.interpretaAccionEspecial(accion, gestorMapa.getMapa(nivel), p1, p2, nivel);
+                boolean exito = lector.interpretaAccionEspecial(accion, m, p1, p2, nivel);
                 if (exito) {
                     ejecutarAccionEspecial(2);
                 }
@@ -150,7 +149,7 @@ public class Juego {
                     System.out.print("Escriba la accion duo (" + p2.getAccionDuo(nivel) + "): ");
                     accion = scan.nextLine();
                     /*EJECUTA ACCION DUO SEGUN NIVEL*/
-                    boolean exito = lector.interpretaAccionEspecial(accion, gestorMapa.getMapa(nivel), p1, p2, nivel);
+                    boolean exito = lector.interpretaAccionEspecial(accion, m, p1, p2, nivel);
                     if (exito) {
                         ejecutarAccionEspecial(3);
                     }
@@ -158,7 +157,6 @@ public class Juego {
                 }
             }
         }
-
         /**
          * ************ SEGUNDO CASO: MOVIMIENTO COMÚN *************
          */
@@ -183,7 +181,7 @@ public class Juego {
                 //No hace nada, regresa a seguir jugando
             }
         } else {
-            lector.interpretaMovimiento(accion, p1, p2, gestorMapa, nivel);
+            lector.interpretaMovimiento(accion, p1, p2, m, nivel);
         }
     }
 
@@ -410,25 +408,21 @@ public class Juego {
     private void inicializarPersonajes(int nivel) {
         /*AQUI SE PUEDE REALIZAR LECTURA DE PERSONAJE Y ENEMIGO*/
         /*SUS DATOS, ETC*/
-        if (p1 == null) {
+        if (p1 == null) 
             p1 = new Personaje('A');
-        }
-        if (p2 == null) {
+        if (p2 == null) 
             p2 = new Personaje('B');
-        }
-        if (p1.getVida() <= 0) {
+        
+        if (p1.getVida() <= 0)
             p1.setVida(10);
-        }
-        if (nivel == 0) {
+        if (nivel == 0)
             Cargar_Niveles_XML(0);
-        } else if (nivel == 1) {
+        else if (nivel == 1)
             Cargar_Niveles_XML(1);
-        } else if (nivel == 2) {
+        else if (nivel == 2)
             Cargar_Niveles_XML(2);
-        } else if (nivel == 3) {
+        else if (nivel == 3)
             Cargar_Niveles_XML(3);
-        }
-
     }
 
     private void Cargar_Niveles_XML(int nivel) {
@@ -458,30 +452,11 @@ public class Juego {
     }
 
     private void inicializarActividad(int nivel) {
+        if (nivel < 0 || nivel >= gestorMapa.getNumNiveles());
         Mapa mapa = gestorMapa.getMapa(nivel);
         /*PARCHE 1*/
         this.parcheActividadInicial(nivel);
-        if (nivel == 0) {
-            cargar_Actividad_XML(0);
-        } else if (nivel == 1) {
-            cargar_Actividad_XML(1);
-//            Terreno terreno1 = ((Terreno) mapa.getMapaAt(9, 4).getObj());
-//            terreno1.setActivo(false);
-//            mapa.getListaTerrenoInactivo().add(terreno1);
-        } else if (nivel == 2) {
-            cargar_Actividad_XML(2);
-//            Terreno terreno1 = ((Terreno) mapa.getMapaAt(6, 8).getObj());
-//            Terreno terreno2 = ((Terreno) mapa.getMapaAt(8, 8).getObj());
-//            terreno1.setActivo(false);
-//            terreno2.setActivo(false);
-//            mapa.getListaTerrenoInactivo().add(terreno1);
-//            mapa.getListaTerrenoInactivo().add(terreno2);
-        } else if (nivel == 3) {
-            cargar_Actividad_XML(3);
-//            Terreno terreno1 = ((Terreno) mapa.getMapaAt(9, 10).getObj());
-//            terreno1.setActivo(false);
-//            mapa.getListaTerrenoInactivo().add(terreno1);
-        }
+        this.cargar_Actividad_XML(nivel);        
     }
 
     private void cargar_Actividad_XML(int nivel) {
@@ -492,26 +467,20 @@ public class Juego {
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(inputFile);
             doc.getDocumentElement().normalize();
-            NodeList nList = doc.getElementsByTagName("Terreno");
+            NodeList nList = doc.getElementsByTagName("Nivel");
             Node nNode = nList.item(nivel);
             Element eElement = (Element) nNode;
             
-            int fila1 = Integer.parseInt(eElement.getElementsByTagName("fila1").item(0).getTextContent());
-            int columna1 = Integer.parseInt(eElement.getElementsByTagName("columna1").item(0).getTextContent());
+            NodeList filas = eElement.getElementsByTagName("fila");
+            NodeList columnas = eElement.getElementsByTagName("columna");
             
-            int fila2 = Integer.parseInt(eElement.getElementsByTagName("fila2").item(0).getTextContent());
-            int columna2 = Integer.parseInt(eElement.getElementsByTagName("columna2").item(0).getTextContent());
-            
-            Terreno terreno1 = ((Terreno) mapa.getMapaAt(fila1, columna1).getObj());
-            terreno1.setActivo(false);
-            mapa.getListaTerrenoInactivo().add(terreno1);
-            
-            if (nivel == 0 || nivel == 2) {
-                Terreno terreno2 = ((Terreno) mapa.getMapaAt(fila2, columna2).getObj());
-                terreno2.setActivo(false);                
-                mapa.getListaTerrenoInactivo().add(terreno2);
+            for (int i = 0; i < filas.getLength(); i++){
+                int fila = Integer.parseInt(filas.item(i).getTextContent());
+                int col = Integer.parseInt(columnas.item(i).getTextContent());
+                Terreno terreno = ((Terreno) mapa.getMapaAt(fila, col).getObj());
+                terreno.setActivo(false);
+                mapa.getListaTerrenoInactivo().add(terreno);
             }
-            
         } catch (Exception e) {
             //e.printStackTrace();
         }
