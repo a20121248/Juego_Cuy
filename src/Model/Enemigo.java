@@ -1,24 +1,23 @@
 package Model;
-/**
- *
- * @author Godievski
- */
+
+import java.awt.image.BufferedImage;
+
 public class Enemigo extends Dibujable {
     /*PosX & PosY indica la esquina izquierda superior*/
     private int posX; 
     private int posY;
     private int tipo; //1: ataca al jugador 1, 2: ataca al jugador 2, 3: ataca a ambos
     
-    public Enemigo(char elementoGrafico){
-        super(elementoGrafico);
+    public Enemigo(BufferedImage img, char elementoGrafico){
+        super(img, elementoGrafico);
     }
-    public Enemigo (int posX, int posY, char elementoGrafico){
-        super(elementoGrafico);
+    public Enemigo(BufferedImage img, int posX, int posY, char elementoGrafico){
+        super(img, elementoGrafico);
         this.posX = posX;
         this.posY = posY;
     }    
-    public Enemigo (int posX, int posY, char elementoGrafico, int alto, int ancho){
-        super(elementoGrafico, alto, ancho);
+    public Enemigo(BufferedImage img, int posX, int posY, char elementoGrafico, int alto, int ancho){
+        super(img, elementoGrafico, alto, ancho);
         this.posX = posX;
         this.posY = posY;
     }

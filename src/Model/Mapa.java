@@ -8,14 +8,14 @@ public class Mapa {
     private Celda[][] mapa;
     static int filas = 12;
     static int columnas = 16;
-    List listaTerrenoInactivo;
+    ArrayList<Terreno> listaTerrenoInactivo;
 
     public Mapa() {
         mapa = new Celda[filas][columnas];
-        for (int f = 0; f < filas; ++f)
-            for (int c = 0; c < columnas; ++c)
+        for (int f = 0; f < filas; f++)
+            for (int c = 0; c < columnas; c++)
                 mapa[f][c] = new Celda();
-        listaTerrenoInactivo = new ArrayList();
+        listaTerrenoInactivo = new ArrayList<Terreno>();
     }
 
     public void setMapaAt(int fila, int columna, Dibujable obj) {
@@ -36,6 +36,10 @@ public class Mapa {
 
     public List getListaTerrenoInactivo() {
         return this.listaTerrenoInactivo;
+    }
+    
+    public void addListaTerrenoInactivo(Terreno terr) {
+        listaTerrenoInactivo.add(terr);
     }
 
 }
