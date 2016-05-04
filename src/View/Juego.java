@@ -1,13 +1,13 @@
 package View;
 
+import java.util.Scanner;
 import java.io.IOException;
 import Controller.*;
 import Model.*;
-import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
+import java.awt.Graphics;
+import java.util.List;
 import java.io.File;
-import javax.imageio.ImageIO;
-import javax.swing.JOptionPane;
+import java.io.FileNotFoundException;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 import org.w3c.dom.Document;
@@ -16,172 +16,299 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 
 public class Juego {
-    public static String nombre = "";
 
-    private Renderizador rend;
-    private InterpreteComandos lector;
-    private GestorMapas gestorMapa;
-    private Personaje p1, p2;
-    private int nivel;
-    final String[] txt_Historia, txt_Dialogo;
-    Ventana ventana;
-    PanelGrafico pnlGrafico;
-    PanelTexto pnlTexto;
-
+    public Renderizador rend;
+    public InterpreteComandos lector;
+    public GestorMapas gestorMapa;
+    public Personaje p1;
+    public Personaje p2;
+    private final Scanner scan;
+    public int nivel;
+    public boolean inicio_Nivel;
+    
+    private Ventana ventana;
+    
     public static final int MENU_JUEGO = 0;
     public static final int NOMBRE_PLAYER1 = 1;
     public static final int NOMBRE_PLAYER2 = 2;
     public static final int CAPTURAR_MOVIMIENTO = 3;
+    public static final int CAPTURAR_ACCION_ESPECIAL = 4;
+    public static final int CAPTURAR_ACCION_DUO = 5;
+    public static final int NO_CAPTURAR = 9;
 
-    public static int eventFlag = MENU_JUEGO; // INDICA EN QUE SECCION ESTOY
-
-    public Juego(Ventana ventana, PanelGrafico pnlGrafico, PanelTexto pnlTexto) {
-
-        p1 = p2 = null;
-        nivel = 0;
-        rend = new Renderizador(pnlGrafico, pnlTexto);
+    public static int eventFlag = CAPTURAR_MOVIMIENTO; // INDICA EN QUE SECCION ESTOY
+    
+    public Juego(Ventana ventana) {
+        rend = new Renderizador();
         lector = new InterpreteComandos();
         gestorMapa = new GestorMapas();
-
+        scan = new Scanner(System.in);
+        p1 = p2 = null;
+        nivel = 0;
+        inicio_Nivel = true;
+        this.ventana = ventana;
         this.inicializarPersonajes(nivel);
         this.inicializarActividad(nivel);
-        this.pnlGrafico = pnlGrafico;
-        this.pnlTexto = pnlTexto;
-        this.ventana = ventana;
-
-        txt_Historia = new String[4];
-        txt_Historia[0] = "- Kiru y Milo conversan.\nLe nace la pregunta a Kiru y deciden viajar.";
-        txt_Historia[1] = "- Kiru y Milo viajan a Paracas en un auto.\nLlegan a la playa y empiezan a jugar.";
-        txt_Historia[2] = "- Kiru y Milo se encuentran con Peli el Pelicano.\nPeli el pelicano no sabe de donde viene Kiru. Kiru y Milo deciden viajar a la sierra.";
-        txt_Historia[3] = "- Kiru y Milo conversan con Dana la Llama.\nDana responde la pregunta de Kiru. Kiru se contenta y decide, con Milo, viajar por todos los Andes.";
-
-        txt_Dialogo = new String[2];
-        txt_Dialogo[0] = "- Usa WASD para mover a Kiru y JKLI para mover a Milo.\n"
-                + "- Si ves un lugar para la accion o el duo... Parate sobre el!! Podras realizar acciones especiales.\n"
-                + "- Solo podras pasar los niveles con la ayuda de las acciones especiales. Para esto, tendras que presionar comandos que se mostraran en un cuadro de dialogo como este.\n"
-                + "- Los comandos deben ser ejecutados en la secuencia correcta, sino perderas puntos de vida.\n"
-                + "- Puedes ver los puntos de vida en la parte superior de la pantalla.\n"
-                + "- Para activar los terrenos con acciones especiales duo, tienen que estar sobre ellos Kiru y Milo al mismo tiempo, en los de acciones especiales solo con uno basta.\n";
-        txt_Dialogo[1] = "- En tu aventura, a veces te toparas con animales malos.\n"
-                + "- Estos enemigos te bajaran puntos de vida. Si tus puntos de vida llegan a 0, se acabara el juego.\n"
-                + "- Si un enemigo afecta a un personaje, este no se podra mover. Tendras que usar a su amigo para ayudarlo.\n";
+        //ANHADIDO CARGAR OBJETO AYUDA
+        this.cargar_Objetos_XML(1);
+          
     }
 
-    public void start() {
-        pnlTexto.textos.clear();
-        pnlTexto.addTexto("\n");
-        pnlTexto.addTexto("1.- Iniciar juego");
-        pnlTexto.addTexto("2.- Cargar partida");
-        pnlTexto.addTexto("3.- Salir");
-        pnlTexto.repaint();
-//        rend.mostrarMapa_Consola(gestorMapa, nivel, p1, p2);                
+
+    public void capturarAccion(char key) throws IOException, InterruptedException {
+        Mapa m = this.gestorMapa.getMapa(nivel);
+        lector.interpretaMovimiento(key, p1, p2, m, nivel);
     }
 
-    private void evt_MenuJuego(KeyEvent evt) {
-        char opcion = evt.getKeyChar();
-        if (opcion == '1') {
-//            rend.mostrarMapa(gestorMapa, nivel, p1, p2);
-            pnlTexto.textos.clear();
-            pnlTexto.addTexto("\n");
-            pnlTexto.addTexto("Ingrese el nombre del jugador 1.");
-            pnlTexto.addTexto("\n");
-            pnlTexto.repaint();
-            eventFlag = NOMBRE_PLAYER1;
-        } else if (opcion == '2') {
-//            opcionCargarJuego();
-        } else if (opcion == '3') {
-            ventanaConfirmacionSalir();
+    public int caputarAccionEspecial(char key, int index) throws IOException, InterruptedException{
+        /*0-> SE FALLÓ*/
+        /*1-> EXITO TOTAL, ACCION P1*/
+        /*2-> EXITO TOTAL, ACCION P2*/
+        /*3-> EXITO TOTAL, ACCION DUO*/
+        /*4-> EXITO PARCIAL*/
+        int tipo;
+        tipo = lector.interpretaAccionEspecial(key, index, gestorMapa.getMapa(nivel), p1, p2, nivel);
+        if (tipo == 0){
+            //RESTAR VIDA PERSONAJE
+            //p1.setVida(p1.getVida() - 2);
+        }else if (tipo == 1 || tipo == 2 || tipo == 3){
+            ejecutarAccionEspecial(tipo);
+            eventFlag = CAPTURAR_MOVIMIENTO;
         }
+        return tipo;
     }
-
-    private void evt_IngresarNombre(KeyEvent evt, int player) {
-        char c = evt.getKeyChar();
-        if (Character.isAlphabetic(c)) {
-            pnlTexto.anadirUltimo(c);
-            nombre += c;
-            pnlTexto.repaint();
-        }
-
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            if (eventFlag == NOMBRE_PLAYER1) {
-                p1.setNombre(nombre);
-                nombre = "";
-
-                pnlTexto.addTexto("\n");
-                pnlTexto.addTexto("Ingrese el nombre del jugador 2.");
-                pnlTexto.addTexto("\n");
-                pnlTexto.repaint();
-
-                eventFlag = NOMBRE_PLAYER2;
-            } else if (eventFlag == NOMBRE_PLAYER2) {
-                p2.setNombre(nombre);
-                
-                pnlTexto.inicializarTexto(p1.getNombre());
-                pnlTexto.repaint();
-                rend.mostrarMapa(gestorMapa, nivel, p1, p2);
-                eventFlag = CAPTURAR_MOVIMIENTO;
+    
+    private void ejecutarAccionEspecial(int player) throws IOException, InterruptedException{
+        /*PLAYER INDICA QUE JUGADOR MANDÓ LA ACCION*/
+        if (nivel == 0) {
+            if (player == 1) {
+                for (int i = 0; i < 3; i++) {
+                    p1.setPosX(p1.getPosX() + 1);
+                    this.renderizar();
+                    //DELAY
+                }
+                //ACTIVAR TERRENOS
+                List listaTerrenoInactivos = gestorMapa.getMapa(nivel).getListaTerrenoInactivo();
+                for (int i = 0; i < listaTerrenoInactivos.size(); i++) {
+                    Terreno terreno = (Terreno) listaTerrenoInactivos.get(i);
+                    terreno.setActivo(true);
+                }
+            } else if (player == 2) {
+                //NOTHING
+            } else if (player == 3) {
+                p1.setPosY(p1.getPosY() + 1);
+                p2.setPosY(p2.getPosY() - 1);
+                this.renderizar();
+                //DELAY
+                for (int i = 0; i < 2; i++) {
+                    p1.setPosX(p1.getPosX() + 1);
+                    p2.setPosX(p2.getPosX() + 1);
+                    this.renderizar();
+                    //DELAY
+                }
+            }
+        } else if (nivel == 1) {
+            if (player == 1) {
+                int xOrig = p1.getPosX();
+                int yOrig = p1.getPosY();
+                for (int i = 0; i < 2; i++) {
+                    p1.setPosY(p1.getPosY() + 1);
+                    this.renderizar();
+                    //DELAY
+                }
+                p1.setPosY(yOrig + 4);
+                this.renderizar();
+                //DELAY
+                //AQUI DESTRUYE ESAS COSAS
+                Celda celda1 = gestorMapa.getMapa(nivel).getMapaAt(yOrig + 4, xOrig);
+                Celda celda2 = gestorMapa.getMapa(nivel).getMapaAt(yOrig + 5, xOrig);
+                celda1.setObj(new Terreno('N', 2));
+                celda2.setObj(new Terreno('N', 2));
+                this.renderizar();
+                //DELAY
+                //VUELVE AL ORIGINAL
+                p1.setPosX(xOrig);
+                p1.setPosY(yOrig);
+                //ACTIVAR TERRENOS
+                List listaDuo = gestorMapa.getMapa(nivel).getListaTerrenoInactivo();
+                for (int i = 0; i < listaDuo.size(); i++) {
+                    Terreno terreno = (Terreno) listaDuo.get(i);
+                    terreno.setActivo(true);
+                }
+            } else if (player == 2) {
+                //RECORRE TERRITORIO
+                int xOrig = p2.getPosX();
+                int yOrig = p2.getPosY();
+                p2.setPosX(xOrig - 1);
+                this.renderizar();
+                //DELAY
+                /////
+                p2.setPosX(xOrig - 2);
+                //DESTRUYE LA ARENA
+                Celda celda = gestorMapa.getMapa(nivel).getMapaAt(yOrig, xOrig - 1);
+                celda.setObj(new Terreno('N', 2));
+                this.renderizar();
+                //DELAY
+            } else if (player == 3) {
+                //NOTHING
+            }
+        } else if (nivel == 2) {
+            if (player == 1) {
+                for (int i = 0; i < 3; i++) {
+                    p1.setPosX(p1.getPosX() + 1);
+                    this.renderizar();
+                    //DELAY
+                }
+                //ACTIVAR TERRENOS
+                List listaTerrenoInactivos = gestorMapa.getMapa(nivel).getListaTerrenoInactivo();
+                for (int i = 0; i < listaTerrenoInactivos.size(); i++) {
+                    Terreno terreno = (Terreno) listaTerrenoInactivos.get(i);
+                    terreno.setActivo(true);
+                }
+            } else if (player == 2) {
+                //NOTHING
+            } else if (player == 3) {
+                p1.setPosX(p1.getPosX() + 1);
+                p2.setPosX(p2.getPosX() + 1);
+                this.renderizar();
+                //DELAY
+                p1.setPosX(p1.getPosX() + 3);
+                p1.setPosY(p1.getPosY() - 1);
+                p2.setPosX(p2.getPosX() + 3);
+                this.renderizar();
+                //DELAY
+                p1.setPosY(p1.getPosY() + 1);
+                p2.setPosY(p2.getPosY() - 1);
+                this.renderizar();
+                //DELAY
+            }
+        } else if (nivel == 3) {//NIVEL CON ENEMIGO
+            if (player == 1) {
+                //NADA
+            } else if (player == 2) {
+                //ANIMACION
+                int xOrig = p2.getPosX();
+                int yOrig = p2.getPosY();
+                //1
+                p2.setPosY(yOrig - 1);
+                p2.setPosX(xOrig - 1);
+                this.renderizar();
+                //DELAY
+                //2
+                p2.setPosY(yOrig - 3);
+                this.renderizar();
+                //DELAY
+                //3
+                p2.setPosY(yOrig - 4);
+                this.renderizar();
+                //DELAY
+                //DESTRUYE ENEMIGO Y TRIGGERS
+                Terreno t = new Terreno('S', 1);
+                Mapa m = gestorMapa.getMapa(nivel);
+                m.setMapaAt(4, 9, t);
+                m.setMapaAt(3, 10, t);
+                m.setMapaAt(4, 10, t);
+                m.setMapaAt(5, 10, t);
+                m.setMapaAt(6, 10, t);
+                //4
+                p2.setPosX(xOrig);
+                p2.setPosY(yOrig);
+                this.renderizar();
+                //DELAY
+            } else if (player == 3) {
+                //NOTHING
             }
         }
     }
 
-    public void procesarEvento(KeyEvent evt) {
-        // Permite salir en Todo Momento
-        if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            ventanaConfirmacionSalir();
-            return;
-        }
+    public void actualizarInfo() throws IOException, InterruptedException {
+        int posX1 = p1.getPosX();
+        int posY1 = p1.getPosY();
+        int posX2 = p2.getPosX();
+        int posY2 = p2.getPosY();
 
-        if (eventFlag == MENU_JUEGO) {
-            evt_MenuJuego(evt);
-        } else if (eventFlag == NOMBRE_PLAYER1) {
-            evt_IngresarNombre(evt, 1);
-        } else if (eventFlag == NOMBRE_PLAYER2) {
-            evt_IngresarNombre(evt, 2);
+        Mapa mapa = this.gestorMapa.getMapa(nivel);
+        Dibujable obj1 = mapa.getMapaAt(posY1, posX1).getObj();
+        Dibujable obj2 = mapa.getMapaAt(posY2, posX2).getObj();
+        
+        /*CAMBIA FLAGS*/
+        if (obj1 instanceof Terreno)
+            if (((Terreno) obj1).getTipo() == 3 && ((Terreno) obj1).getActivo())
+                eventFlag = CAPTURAR_ACCION_ESPECIAL;
+        if (obj2 instanceof Terreno)
+            if (((Terreno) obj2).getTipo() == 3 && ((Terreno) obj2).getActivo()) 
+                eventFlag = CAPTURAR_ACCION_ESPECIAL;
+            else if (obj1 instanceof Terreno)
+                if (((Terreno) obj1).getTipo() == 4
+                        && ((Terreno) obj2).getTipo() == 4
+                        && ((Terreno) obj1).getActivo()
+                        && ((Terreno) obj2).getActivo()) {
+                    eventFlag = CAPTURAR_ACCION_DUO;
+                }     
+
+        /*VERIFICA LLEGARON A LA META*/
+        if (obj1 instanceof Terreno && obj2 instanceof Terreno) {
+            if (((Terreno)  obj1).getTipo() == 6
+                    && ((Terreno) obj2).getTipo() == 6) {
+                renderizar();
+                nivel += 1;
+                inicio_Nivel = true;
+                //System.out.print(". Presiona ENTER para continuar...");
+                //COLOCAR TIMER O UN CAPTURADOR DE KEY
+                inicializarPersonajes(nivel);
+                inicializarActividad(nivel);
+            }
+        }
+        
+        /*VERIFICA SI EL PERSONAJE CAYÓ EN UN TRIGGER ENEMIGO*/
+        if (obj1 instanceof Terreno || obj2 instanceof Terreno) {
+            Terreno ter = (Terreno) obj1;
+            if (ter.getActivo() && ter.getTipo() == 5) {
+                //ACTIVE LA VISIBILIDAD DEL ENEMIGO Y QUE LO MUESTRE
+                Enemigo e = this.gestorMapa.getEnemigo(nivel);
+                e.setElementoGrafico('E');
+                //DISMINUIR LA VIDA DEL JUGADOR 1
+                this.p1.setVida(this.p1.getVida() - 1);
+                //Activar el terreno de accion
+                List l = this.gestorMapa.getMapa(nivel).getListaTerrenoInactivo();
+                for (int i = 0; i < l.size(); i++) {
+                    Terreno t = (Terreno) (l.get(i));
+                    t.setActivo(true);
+                }
+            }
         }
     }
 
-    private void ventanaConfirmacionSalir() {
-        Object[] options = {"Sí", "No"};
-
-        int n = JOptionPane.showOptionDialog(ventana, "¿Seguro que desea salir?", "Mensaje de confirmacion", JOptionPane.YES_OPTION, JOptionPane.NO_OPTION, null, options, options[0]);
-        if (n == JOptionPane.YES_OPTION) {
-            System.exit(0);
-        }
+    public void renderizar() throws IOException, InterruptedException {
+        Mapa mapa = this.gestorMapa.getMapa(nivel);
+        Graphics graph = ventana.pnlGrafico.getGraphics();
+        rend.dibujarMapa(graph,mapa);
+        rend.dibujarJugadores(graph,p1,p2);
     }
 
-    private BufferedImage crear_Img(String ruta) {
-        BufferedImage img = null;
-        try {
-            img = ImageIO.read(new File(ruta));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return img;
+    private boolean finJuego() {
+        /*TOPE NIVEL: cantidad de mapas*/
+        /*Si ha muerto o terminó todos los niveles*/
+        return (p1.getVida() <= 0) || (nivel == gestorMapa.getNumNiveles());
     }
-
+    
     private void inicializarPersonajes(int nivel) {
-        if (nivel < 0 || nivel >= gestorMapa.getNumNiveles()) {
-            return;
-        }
-        String ruta = "";
-        if (p1 == null) {
-            ruta = "imagenes/sprite_cuy.gif";
-            p1 = new Personaje(crear_Img(ruta), 'A');
-        }
-        if (p2 == null) {
-            ruta = "imagenes/sprite_perro.gif";
-            p2 = new Personaje(crear_Img(ruta), 'B');
-        }
-
-        if (p1.getVida() <= 0) {
+        /*AQUI SE PUEDE REALIZAR LECTURA DE PERSONAJE Y ENEMIGO*/
+        /*SUS DATOS, ETC*/
+        if (nivel < 0 || nivel >= gestorMapa.getNumNiveles()) return;
+        if (p1 == null) 
+            p1 = new Personaje('A');
+        if (p2 == null) 
+            p2 = new Personaje('B');
+        
+        if (p1.getVida() <= 0)
             p1.setVida(10);
-        }
-        cargar_Niveles_XML(nivel);
+        Cargar_Personajes_XML(nivel);
     }
 
-    private void cargar_Niveles_XML(int nivel) {
+    private void Cargar_Personajes_XML(int nivel) {
         try {
-            File inputFile = new File("niveles.xml");
+            File inputFile = new File("./Files/personajes.xml");
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(inputFile);
@@ -189,49 +316,35 @@ public class Juego {
             NodeList nList = doc.getElementsByTagName("Nivel");
             Node nNode = nList.item(nivel);
             Element eElement = (Element) nNode;
-
+            
             p1.setPosY(Integer.parseInt(eElement.getElementsByTagName("p1PosY").item(0).getTextContent()));
             p1.setPosX(Integer.parseInt(eElement.getElementsByTagName("p1PosX").item(0).getTextContent()));
             p1.setAccionEspecial(eElement.getElementsByTagName("p1AccEsp").item(0).getTextContent(), nivel);
-
+            
             p2.setPosY(Integer.parseInt(eElement.getElementsByTagName("p2PosY").item(0).getTextContent()));
             p2.setPosX(Integer.parseInt(eElement.getElementsByTagName("p2PosX").item(0).getTextContent()));
             p2.setAccionEspecial(eElement.getElementsByTagName("p2AccEsp").item(0).getTextContent(), nivel);
-
+            
             p1.setAccionDuo(eElement.getElementsByTagName("AccDuo").item(0).getTextContent(), nivel);
             p2.setAccionDuo(eElement.getElementsByTagName("AccDuo").item(0).getTextContent(), nivel);
+        } catch (FileNotFoundException ex) {
+            System.err.println("ERROR: No se ha encontrado el archivo personajes.xml");
+            System.exit(1);
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }   
 
     private void inicializarActividad(int nivel) {
         if (nivel < 0 || nivel >= gestorMapa.getNumNiveles());
         Mapa mapa = gestorMapa.getMapa(nivel);
-//        /*PARCHE 1*/
+        /*PARCHE 1*/
         this.parcheActividadInicial(nivel);
         this.cargar_Actividad_XML(nivel);
     }
-//
-
-    private void parcheActividadInicial(int nivel) {
-        Mapa mapa = gestorMapa.getMapa(nivel);
-        if (mapa == null) {
-            return;
-        }
-        for (int i = 0; i < 12; ++i) {
-            for (int j = 0; j < 16; ++j) {
-                Celda celda = mapa.getMapaAt(i, j);
-                Dibujable dib = celda.getObj();
-                if (dib instanceof Terreno) {
-                    ((Terreno) dib).setActivo(true);
-                }
-            }
-        }
-    }
 
     private void cargar_Actividad_XML(int nivel) {
-        Mapa mapa = gestorMapa.getMapa(nivel);
+        Mapa mapa = gestorMapa.getMapa(nivel);        
         try {
             File inputFile = new File("terreno.xml");
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -241,19 +354,59 @@ public class Juego {
             NodeList nList = doc.getElementsByTagName("Nivel");
             Node nNode = nList.item(nivel);
             Element eElement = (Element) nNode;
-
+            
             NodeList filas = eElement.getElementsByTagName("fila");
             NodeList columnas = eElement.getElementsByTagName("columna");
-
-            for (int i = 0; i < filas.getLength(); ++i) {
+            
+            for (int i = 0; i < filas.getLength(); i++){
                 int fila = Integer.parseInt(filas.item(i).getTextContent());
                 int col = Integer.parseInt(columnas.item(i).getTextContent());
                 Terreno terreno = ((Terreno) mapa.getMapaAt(fila, col).getObj());
                 terreno.setActivo(false);
-                mapa.addListaTerrenoInactivo(terreno);
+                mapa.getListaTerrenoInactivo().add(terreno);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
+    }    
+    
+    private void cargar_Objetos_XML(int nivel){
+        Mapa mapa = gestorMapa.getMapa(nivel);
+        try {
+            File inputFile = new File("objetos.xml");
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(inputFile);
+            doc.getDocumentElement().normalize();
+            NodeList nList = doc.getElementsByTagName("ObjetoAyuda");
+            
+            for (int i = 0; i < nList.getLength(); i++){
+                Node nNode = nList.item(i);
+                Element eElement = (Element) nNode;
+                String elmGrf = eElement.getElementsByTagName("elementoGrafico").item(0).getTextContent();
+                char elementoGrafico = elmGrf.charAt(0);
+                int fila = Integer.parseInt(eElement.getElementsByTagName("fila").item(0).getTextContent());
+                int columna = Integer.parseInt(eElement.getElementsByTagName("columna").item(0).getTextContent());
+                Dibujable dib = mapa.getMapaAt(fila, columna).getObj();
+                if (dib instanceof Objeto){
+                    Objeto obj = (Objeto) dib;
+                    obj.setElementoGrafico(elementoGrafico);
+                }
+            }
+        } catch (Exception e) {
+            //e.printStackTrace();
+        }
+    }
+    
+    private void parcheActividadInicial(int nivel){
+        Mapa mapa = gestorMapa.getMapa(nivel);
+        if (mapa == null) return;
+        for (int i = 0; i < 12; i++)
+            for(int j = 0; j < 16; j++){
+                Celda celda = mapa.getMapaAt(i, j);
+                Dibujable dib = celda.getObj();
+                if (dib instanceof Terreno)
+                    ((Terreno) dib).setActivo(true);
+            }
     }
 }
