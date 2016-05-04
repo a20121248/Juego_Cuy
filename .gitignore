@@ -1,3 +1,8 @@
 /nbproject/private/
 /build/
 /dist/
+git rm CAMBIOS.txt
+git rm Mapa0.txt
+git rm Mapa1.txt
+git rm Mapa2.txt
+git rm Mapa3.txt
